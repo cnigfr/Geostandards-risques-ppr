@@ -1,3 +1,3 @@
 # Espace du Groupe de travail du CNIG
 
-_Ce dossier est dédié aux travaux du GT du CNIG. Il a vocation à héberger les documents de travail (CR de GT, supports, etc.). Il n'est pas obligatoire de le conserver, notamment si un autre outil que github est utilisé pour le travail collaboratif._
+Le Géostandard Risques - Plan de prévention des risques est un des livrables du Groupe de travail Refonte des Géostandards risques. Vous pouvez retrouver tous les éléments de suivi de ce groupe de travail sur le dépôt central Github [Geostandards-Risques](https://github.com/cnigfr/Geostandards-Risques/tree/main/suivi). 
