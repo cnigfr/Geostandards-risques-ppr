@@ -55,16 +55,16 @@ Groupe de travail refonte des Géostandards Risques
 | 0.2 | 29/04/2024 | Prise en compte de la relecture du Groupe de Travail. Version pour commentaires publics. Modifications : Application des définitions DGPR pour les risques, aléas et enjeux. Retrait des PPR Miniers du périmètre d'application du document. Prise en compte de l'aléa exceptionnel avalanches. Ajout des spécificités des risques technologiques industriels. Simplification du système de catégorisation des enjeux. Prise en compte du multirisques au niveau du zonage réglementaire. Ajout d'une annexe clarifiant la gestion des PPRN multirisques. Modifications éditoriales pour apporter plus de clarté : ajouts d'un schéma d'ensemble et mise en valeur des spécificités avec le modèle commun, ajout d'un schéma des tables d'implémentation et mise en valeur du caractère obligatoire ou non des éléments. Mise en annexes du code SQL et des nomenclatures d’enjeux. |
 | 0.3 | 27/11/2024 | Version tenant compte des commentaires reçus lors de la consultation publique et soumise au CNIG pour validation. Principales modifications : Consignes pour livraison en Shapefile. Rajout de couches de synthèse multi aléas. Enrichissement du modèle pour les ouvrages protecteurs. Rajout du périmètre d’étude. Fusion des nomenclatures enjeux PPRL et PPRN. Retrait de l’annexe de code SQL. |
 | 1.0 | 10/12/2024 | Version validée par le CNIG. |
-| 1.0.1 | 16/07/2025 | Version correctrice : clefs étrangères de `typevulnerabilite`, renommage des champs `descript` pour la livraison shapefile et cohérence nommage des métadonnées. |
+| 1.0.1 | 16/07/2025 | Version correctrice : clefs étrangères de `typevulnerabilite`, renommage des champs `descript` pour la livraison shapefile et cohérence nommage des métadonnées. Ajout du risque naturel Tsunami (19) de la nomenclature GASPAR.|
 
 
 ##  Participation à l'écriture
 
-Ce standard est le fruit des travaux du groupe de travail CNIG sur la refonte des Géostandards risques. Ce dernier rassemble les acteurs impliqués dans l’élaboration, la gestion et la diffusion des données de prévention des risques relatives à ces standards ainsi que des utilisateurs amenés à exploiter ces données. Il est animé par l’IGN pour le compte de la Direction Générale de la Prévention des Risques (DGPR). 
+Ce standard est le fruit des travaux du groupe de travail CNIG sur la refonte des Géostandards risques. Ce dernier rassemble les acteurs impliqués dans l’élaboration, la gestion et la diffusion des données de prévention des risques relatives à ces standards ainsi que des utilisateurs amenés à exploiter ces données. Il est animé par l’IGN pour le compte de la Direction Générale de la Prévention des Risques (DGPR).
 
 Ce standard a été rédigé par Gilles Cébélieu (IGN) et Alison Lenain (IGN) avec les contributions majeures et les relectures des membres du Groupe de travail listés ci-dessous.
 
-| Nom |Affiliation 
+| Nom |Affiliation |
 |-|-|
 | Besson Stanislas | DDT de l'Isère (38) |
 | Bonnin Nicolas | MTECT / DGPR / DAGSI |
@@ -74,14 +74,9 @@ Ce standard a été rédigé par Gilles Cébélieu (IGN) et Alison Lenain (IGN) 
 | Coignon Bastien | MTECT / DGPR / SRNH / SdCAP / BRIL |
 | Evain Yohann | Cerema |
 
+# Présentation du document
 
-> *Liste à compléter et actualiser*
-
-
-#  Présentation du document
-
-
-##  Objectif et raison d'être du standard
+## Objectif et raison d'être du standard
 
 La famille des Géostandards Risques a pour objectif de standardiser les données numériques géographiques relatives aux procédures réglementaires de prévention des risques. Elle a été développée dans le but de moderniser et succéder aux standards COVADIS dédiés à cette thématique tels que les standards Plan de Prévention des Risques (PPR) Naturels, Technologiques et Miniers ou Directive Inondation (DI). 
 
@@ -1829,6 +1824,7 @@ Elle a la structure et le contenu suivants :
 | 175 | Risque Naturel ; Phénomène lié à l'atmosphère ; Grêle | 
 | 176 | Risque Naturel ; Phénomène lié à l'atmosphère ; Neige et pluies verglaçantes |
 | 18 | Risque Naturel ; Radon |
+| 19 | Risque Naturel ; Tsunami |
 | 211	| Risque technologique ; Risque Industriel ; Effet thermique |
 | 212	| Risque technologique ; Risque Industriel ; Effet de surpression | 
 | 213	| Risque technologique ; Risque Industriel ; Effet toxique  |
@@ -2342,6 +2338,7 @@ La structure des tables attributaires s'appuie sur la même structure de tables 
 ### Métadonnées de la livraison Shapefile
 
 Les métadonnées accompagnant la livraison Shapefile sont fournies dans des fichiers XML portant :
+
 - le nom du PPR pour les métadonnées du PPR  : `[TypePPR]_[CodeGASPARComplet].xml`
 - le nom de la table pour des éventuelles métadonnées spécifiques associées à une table. Par exemple : `pprn_76ddtm20120001_zonealeareference_117_s.xml` pour les métadonnées de la table `zonealeareference` du PPRN du Bassin versant de la Scie pour l'aléa "Inondation par submersion marine".
 
