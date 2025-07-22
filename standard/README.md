@@ -10,8 +10,14 @@ Ce répertoire contient les éléments constitutifs du standard définissant le 
 
 ## Génération d'un document word à partir du dépôt
 
-Avec l'outil [pandoc](https://pandoc.org/index.html), la ligne de commande suivante permet de générer le standard au format .docx en s'appuyant sur les styles du modèle de document [Modele-styles.docx](./modele/Modele-styles.docx).
+Avec l'outil [pandoc](https://github.com/jgm/pandoc/releases/tag/3.7.0.2), associé à l'extension [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref/releases/tag/v0.3.20) la ligne de commande suivante permet de générer le standard au format .docx en s'appuyant sur les styles du modèle de document [Modele-styles.docx](./modele/Modele-styles.docx). Le filtre [move-toc.lua](./modele/move-toc.lua) permet de positionner la table des matières à l'endroit voulu dans le document.
 
 ```bash
-pandoc -s -f markdown -t docx --filter pandoc-crossref -o Geostandards-Risques-PPR-vx.y.docx --reference-doc=./modele/Modele-styles.docx Document.md
+pandoc -s -f markdown -t docx --toc --toc-depth=3 --lua-filter=./modele/move-toc.lua --filter pandoc-crossref -o Geostandards-Risques-PPR-vx.y.docx --reference-doc=./modele/Modele-styles.docx Document.md
+```
+
+Le script python suivant permet de supprimer la table des matières intempestive qui a été générée au début du document.
+
+```bash
+python ./modele/post-traitement.py Document.docx
 ```

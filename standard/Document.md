@@ -42,7 +42,8 @@ Groupe de travail refonte des Géostandards Risques
 
 #  Sommaire
 
-> *A générer*
+:::toc
+:::
 
 
 #  Préface
