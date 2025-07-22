@@ -1,0 +1,81 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fontspec}       % Nécessaire pour utiliser Marianne
+\usepackage{setspace}
+\usepackage{ragged2e}
+
+% Déclaration de la police Marianne (si elle est bien installée sur ton système)
+\newfontfamily\marianne{Marianne}
+
+% Couleur bleue officielle (ajustable si besoin)
+\definecolor{etatbleu}{RGB}{15,36,62}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+
+    % Logos en haut
+    \begin{minipage}{0.45\textwidth}
+        \raggedright
+        \includegraphics[width=4cm]{./ressources/logo-cnig.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \raggedleft
+        \includegraphics[width=4cm]{./ressources/ministere-de-la-transition-ecologique-et-solidaire_logo.png} % <-- Remplacer par le logo du sponsor (optionnel)
+    \end{minipage}
+
+    \vspace{1cm} 
+    % -> Si vous avez plusieurs sponsors, ils pourront être indiqués en partie 1.2,
+    % -> Préférez un logo officiel en format PNG (souvent disponible sur le site du collaborateur via le service communication) plutôt qu'une image récupérée sur un moteur de recherche,
+    % -> Le logo du sponsor doit être de la même hauteur que le logo du CNIG.
+
+    % Titre haut centré
+    % {\Huge\bfseries Conseil national de l'information Géolocalisée\par}
+    {\marianne\large\color{etatbleu} Conseil national de l'information Géolocalisée\par}
+
+    \vspace{1cm} 
+
+    % Image centrale
+    \includegraphics[width=6cm]{./ressources/logo-gt-risques.png} % <-- Remplacer par l'illustration du standard
+    % \includegraphics[width=5cm]{./ressources/illustration_standard.PNG}
+    \vspace{1cm} 
+
+    % Titre
+    % {\Large\bfseries Géostandards Risques \par}
+    % Titre principal en Marianne + bleu
+    {\marianne\fontsize{27pt}{26pt}\selectfont\color{etatbleu} Géostandards Risques\par}
+
+    \vspace{0.5cm}
+
+    % Sous-titre
+    % {\Large Plans de prévention des risques (PPR) \par}  % <-- Optionnel
+    % Sous-titre en Marianne + bleu
+    {\marianne\large\color{etatbleu} Plans de prévention des risques (PPR)\par}
+
+    % \vspace{1cm}
+    \vfill
+
+    % Nom du groupe et version
+    % {\Large\itshape Groupe de travail refonte des Géostandards Risques \par}    % <-- Nom du groupe de travail CNIG
+    % \vspace{0.5cm}
+    % {\large Version 1.0.1 - 12 juin 2025 \par}    % <-- Date de publication
+    {\marianne\small\itshape Groupe de travail refonte des Géostandards Risques\par}
+    \vspace{0.3cm}
+    {\marianne\small\itshape Version 1.0.1 - 12 juin 2025\par}
+
+
+
+\end{titlepage}
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\end{document}
