@@ -48,7 +48,7 @@ Les cas d'usages types de ce standard sont décrits dans la partie [Cas d'utilis
 
 ## Modalités de production des données
 
-Les modalités de production des données PPR sont décrites dans la partie [Cycle de vie des données des données](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/Document.md#cycle-de-vie-des-données).
+Les modalités de production des données PPR sont décrites dans la partie [Cycle de vie des données](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/Document.md#cycle-de-vie-des-données).
 
 ### Données ouvertes
 
