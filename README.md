@@ -15,6 +15,7 @@ Les versions en cours de ce géostandard sont accessibles ici :
 
 Ce standard s'appuie sur le Géostandard risques - Modèle commun dont les développements se déroulent sur le dépôt [Geostandards Risques](https://github.com/cnigfr/Geostandards-Risques)
 
+> [!TIP]
 Ce standard CNIG ne possède pas de schéma de données directement accessible sur schema.data.gouv.fr.
 
 Davantage de documentation peut être trouvée sur le site du CNIG sur la [page suivante](https://cnig.gouv.fr/gt-risques-a25378.html).
