@@ -3357,7 +3357,7 @@ Afin d'indiquer quels sont les aléas qui ont engendré quelles zones réglement
 Ce champ multiple est implémenté par une table [Table [TypePPR]_[CodeGASPARComplet]_zoneregmultialea](#table-typeppr_codegasparcomplet_zoneregmultialea) qui fait l'association entre les tables de zonage règlementaire urbain et foncier et la table implémentant la nomenclature des risques de GASPAR [typealea](#table-dénumération-typealea). Il est de ce fait possible de faire des sélections du zonage réglementaire en fonction du type d'aléa.
 
 
-![Implémentation des tables de zones réglementaires multirisques](./ressources/Geopackage-PPRN-Multirisques-View.png){#fig:tabl-zonereg-multi-img}
+![Implémentation des tables de zones réglementaires multirisques](./ressources/GeoPackage-PPRN-Multirisques-View.png){#fig:tabl-zonereg-multi-img}
 
 
 # ANNEXE D - Nomenclatures détaillées des enjeux
