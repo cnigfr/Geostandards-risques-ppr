@@ -1235,7 +1235,9 @@ Où :
   * `pprn_cy` pour un PPR naturel cyclonique ;
   * `pprn_rga` pour un PPR naturel retrait gonflement des argiles ;
   * `pprn_if` pour un PPR naturel feu de forêt ;
-  * `pprt` pour les PPR technologiques.
+  * `pprt` pour les PPR technologiques ;
+  * `pprm` pour les PPR miniers ;
+  * `ppr_hybride` pour les PPR N+T+M.
 
 * `[AAAA]` est l'année de création de la procédure ;
 * `[nnnn]` est le numéro incrémental attribué à la procédure dans GASPAR dans l'année de création.
@@ -1337,13 +1339,13 @@ La table `gpkg_metadata_reference` est une table définie dans [les spécificati
 
 Pour chacun de ces éléments, elle permet de préciser :
 
-- le domaine d'application de l'ensemble des éléments de métadonnées (`reference_scope`) ;
-- éventuellement le nom de la table qui est référencée par ces métadonnées (`table_name`) ;
-- éventuellement le nom de la colonne de la table mentionnée précédemment qui est référencée par ces métadonnées (`column_name`) ;
-- éventuellement la valeur de l'identifiant d'un objet (ligne) de la table mentionnée précédemment qui est référencée par ces métadonnées (`row_id_value`) ;
-- le moment d'écriture de cet élément (`timestamp`) ;
-- l'identifiant de l'ensemble des éléments de métadonnées dans la table `gpkg_metadata` (clef étrangère) auquel s'applique cet élément (`md_file_id`) ;
-- l'identifiant de l'ensemble des éléments de métadonnées parent (clef étrangère) dans la table `gpkg_metadata` (`md_file_id`).
+* le domaine d'application de l'ensemble des éléments de métadonnées (`reference_scope`) ;
+* éventuellement le nom de la table qui est référencée par ces métadonnées (`table_name`) ;
+* éventuellement le nom de la colonne de la table mentionnée précédemment qui est référencée par ces métadonnées (`column_name`) ;
+* éventuellement la valeur de l'identifiant d'un objet (ligne) de la table mentionnée précédemment qui est référencée par ces métadonnées (`row_id_value`) ;
+* le moment d'écriture de cet élément (`timestamp`) ;
+* l'identifiant de l'ensemble des éléments de métadonnées dans la table `gpkg_metadata` (clef étrangère) auquel s'applique cet élément (`md_file_id`) ;
+* l'identifiant de l'ensemble des éléments de métadonnées parent (clef étrangère) dans la table `gpkg_metadata` (`md_file_id`).
 
 La présence de cette table dans un fichier GeoPackage est facultative. Elle devient obligatoire si une table `gpkg_metadata` est présente.
 
@@ -1368,7 +1370,7 @@ Dans le cas des tables d'aléas, il est convenu de ne représenter qu'un seul al
 
 Le nom d'une table du standard suit donc le modèle suivant (en minuscules) :
 
->  `[PrefixePPR]_[nom table]_[code aléa si table d'alea]_[type de geometrie].gpkg`
+> `[PrefixePPR]_[nom table]_[code aléa si table d'alea]_[type de geometrie].gpkg`
 
 Où `[PrefixePPR]` est établi selon les règles de nommage des fichiers définies dans le paragraphe [Nom du fichier de livraison](#nom-du-fichier-de-livraison), en omettant l'extension du fichier.
 
