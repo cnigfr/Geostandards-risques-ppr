@@ -39,16 +39,14 @@ Groupe de travail refonte des Géostandards Risques
 | **Mots-clés** | "Usage des sols" ; "prévention" ; "risque" ; "aléa" ; "aménagement" ; "urbanisme" ; "prescription" ; "servitude" |
 | **Contact** | geostandards-risques-gt-cnig@framalistes.org |
 
-
-#  Sommaire
+# Sommaire
 
 :::toc
 :::
 
+# Préface
 
-#  Préface
-
-##  Historique du document
+## Historique du document
 
 | Version | Date | Raison |
 |-|-|-|
@@ -58,7 +56,6 @@ Groupe de travail refonte des Géostandards Risques
 | 1.0 | 10/12/2024 | Version validée par le CNIG. |
 | 1.0.1 | 16/07/2025 | Version correctrice : clefs étrangères de `typevulnerabilite`, renommage des champs `descript` pour la livraison shapefile et cohérence nommage des métadonnées. Ajout du risque naturel Tsunami (19) de la nomenclature GASPAR.|
 | 1.1.0 | 14/11/2025 | Version correctrice : enrichissement des règles de nommage des tables et fichiers et allongement de la taille du champ `codeProcedure` pour être compatible avec les conventions de GASPAR Nouvelle Génération (NG). |
-
 
 ## Participation à l'écriture
 
@@ -80,27 +77,22 @@ Ce standard a été rédigé par Gilles Cébélieu (IGN) et Alison Lenain (IGN) 
 
 ## Objectif et raison d'être du standard
 
-La famille des Géostandards Risques a pour objectif de standardiser les données numériques géographiques relatives aux procédures réglementaires de prévention des risques. Elle a été développée dans le but de moderniser et succéder aux standards COVADIS dédiés à cette thématique tels que les standards Plan de Prévention des Risques (PPR) Naturels, Technologiques et Miniers ou Directive Inondation (DI). 
+La famille des Géostandards Risques a pour objectif de standardiser les données numériques géographiques relatives aux procédures réglementaires de prévention des risques. Elle a été développée dans le but de moderniser et succéder aux standards COVADIS dédiés à cette thématique tels que les standards Plan de Prévention des Risques (PPR) Naturels, Technologiques et Miniers ou Directive Inondation (DI).
 
-Elle est constituée d'un document socle [CNIG_RISQUES_PPR:2024](https://github.com/cnigfr/Geostandards-Risques/blob/main/standards/Geostandards-risques-commun/Document.md) qui établit les concepts communs à ces géostandards et d'un ensemble de profils applicatifs qui les précisent et les implémentent dans le cas de procédures particulières. 
+Elle est constituée d'un document socle [CNIG_RISQUES_PPR:2024](https://github.com/cnigfr/Geostandards-Risques/blob/main/standards/Geostandards-risques-commun/Document.md) qui établit les concepts communs à ces géostandards et d'un ensemble de profils applicatifs qui les précisent et les implémentent dans le cas de procédures particulières.
 
 Ce document est le profil applicatif qui précise et implémente les concepts communs de [CNIG_RISQUES_PPR:2024](https://github.com/cnigfr/Geostandards-Risques/blob/main/standards/Geostandards-risques-commun/Document.md) pour décrire l'information géographique et sémantique liée aux Plans de Prévention des Risques (PPR) naturels prévisibles ou technologiques et au cadre réglementaire dans lequel ils s'inscrivent.
 
 Il a vocation à se substituer et rendre obsolète la dernière version du standard COVADIS suivant :
 
-* Plan de prévention des risques naturels ou technologiques PPRN – PPRT, version 1.0, corrigée du 31/12/2012. 
-
-
-
+* Plan de prévention des risques naturels ou technologiques PPRN – PPRT, version 1.0, corrigée du 31/12/2012.
 
 ## À qui s'adresse ce document ?
 
 Ce document s'adresse :
 
-- aux services de l'État ou assimilés, chargés de produire les PPR, les maintenir et les diffuser ;
-- aux utilisateurs des PPR, amenés à en prendre connaissance ou les exploiter : services de l'État, collectivités locales, professionnels, bureaux d'études, ou grand public.
-
-
+* aux services de l'État ou assimilés, chargés de produire les PPR, les maintenir et les diffuser ;
+* aux utilisateurs des PPR, amenés à en prendre connaissance ou les exploiter : services de l'État, collectivités locales, professionnels, bureaux d'études, ou grand public.
 
 ##  Comment lire le document
 
@@ -122,20 +114,17 @@ L'[annexe A](#annexe-a---correspondances-avec-les-standards-covadis-ppr-n-et-t),
 
 L'[annexe B](#annexe-b---correspondances-avec-le-standard-cnig-sup-pour-les-sup-pm1-et-pm3), informative, décrit les correspondances du modèle de données du Standard CNIG sur les Servitudes d'Utilité Publique (SUP) avec celui de ce standard de façon à aider à la production des catégories de SUP correspondant à des PPR.
 
-
-
-##  Références
+## Références
 
 Cette partie cite les références documentaires et réglementaires sur lesquelles s'appuie ce standard.
 
-
 ### Références à d'autres documents
 
-Ce document s’appuie ou nécessite la lecture des normes et documents référencées ci-dessous. 
+Ce document s’appuie ou nécessite la lecture des normes et documents référencées ci-dessous.
 
 | Acronyme | Titre | Auteur | Année |
 |-|-|-|-|
-| [CNIG_RISQUES_COMMUN:2024](https://github.com/cnigfr/Geostandards-Risques/tree/main/standards/Geostandards-risques-commun) | Géostandards Risques - Modèle commun | Conseil National de l'Information Géolocalisée (CNIG) | 2024 | 
+| [CNIG_RISQUES_COMMUN:2024](https://github.com/cnigfr/Geostandards-Risques/tree/main/standards/Geostandards-risques-commun) | Géostandards Risques - Modèle commun | Conseil National de l'Information Géolocalisée (CNIG) | 2024 |
 | [Guide PPRN:2016](https://www.actu-environnement.com/media/pdf/guide-pprn.pdf) | Plans de prévention des risques naturels prévisibles (PPRN) - Guide général | Direction Générale de la Prévention des Risques (DGPR) - Cerema | 2016 |
 | [Guide PPRI:2024](https://www.ecologie.gouv.fr/sites/default/files/documents/Guide%20PPRI%20debordement%20de%20cours%20d%27eau%202024.pdf) | Guide méthodologique pour l’élaboration des plans de prévention des risques d’inondation par débordement de cours d’eau (hors cours d’eau torrentiels) | DGPR - Cerema | 2021 |
 | [Guide PPRRuis:2004](https://www.ecologie.gouv.fr/sites/default/files/Guide_m%C3%A9thodo_PPR%20Ruissellement_2004.pdf) | Guide Méthodologique PPR Ruissellement | Direction de la Prévention des Pollutions et des Risques (DPPR) | 2004 |
@@ -195,7 +184,7 @@ L'[arrêté du 10 avril 2007](https://www.legifrance.gouv.fr/loda/id/LEGITEXT000
 | Délaissement | Dans le contexte du "Droit de délaissement" : Le droit de délaissement est une procédure administrative. Elle permet au propriétaire d’un bien immobilier soumis à des prescriptions d’urbanisme l’empêchant d’en jouir, d’inciter le bénéficiaire de la servitude à acquérir le bien. |
 | Expropriation | ([Service-Public.fr](https://www.service-public.fr/particuliers/vosdroits/N326)) L'expropriation est une procédure qui permet à une personne publique (État, collectivités territoriales...) de contraindre un particulier ou une personne morale (entreprise) à céder la propriété de son bien, moyennant le paiement d'une indemnité. |
 
-###  Abréviations
+### Abréviations
 
 | Sigle | Signification |
 |-|-|
