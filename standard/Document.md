@@ -16,7 +16,7 @@ Plans de prévention des risques (PPR)
 
 Groupe de travail refonte des Géostandards Risques
 
-*Version 1.1.0 - 14 novembre 2025*
+*Version 1.0.2 - 14 novembre 2025*
 
 
 
@@ -34,7 +34,7 @@ Groupe de travail refonte des Géostandards Risques
 | **Statut du document** | ~~Projet~~ - ~~Appel à commentaires~~ - ~~Proposé à la commission des Standards du CNIG~~ - Validé |
 | **Licence** | Le présent document est sous [Licence Ouverte (Open Licence) Etalab](https://www.etalab.gouv.fr/licence-ouverte-open-licence/) |
 | **Diffusion** | [PDF sur internet](https://cnig.gouv.fr/IMG/pdf/geostandards-risques-ppr-v1.0.1.pdf) |
-| **Formats disponibles** | [MS Word - DOCX](https://github.com/cnigfr/Geostandards-risques-ppr/raw/refs/heads/master/standard/diffusion/geostandards-risques-ppr-v1.0.1.docx) - [HTML/Markdown](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/Document.md) |
+| **Formats disponibles** | [MS Word - DOCX](https://github.com/cnigfr/Geostandards-risques-ppr/raw/refs/heads/master/standard/diffusion/geostandards-risques-ppr-v1.0.2.docx) - [HTML/Markdown](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/Document.md) |
 | **Thèmes** | (INSPIRE) "Usage des sols", "Lieux de production et sites industriels", "Zones de gestion, de restriction ou de réglementation et unités de déclaration", "Zones de risque naturel" |
 | **Mots-clés** | "Usage des sols" ; "prévention" ; "risque" ; "aléa" ; "aménagement" ; "urbanisme" ; "prescription" ; "servitude" |
 | **Contact** | geostandards-risques-gt-cnig@framalistes.org |
@@ -55,7 +55,7 @@ Groupe de travail refonte des Géostandards Risques
 | 0.3 | 27/11/2024 | Version tenant compte des commentaires reçus lors de la consultation publique et soumise au CNIG pour validation. Principales modifications : Consignes pour livraison en Shapefile. Rajout de couches de synthèse multi aléas. Enrichissement du modèle pour les ouvrages protecteurs. Rajout du périmètre d’étude. Fusion des nomenclatures enjeux PPRL et PPRN. Retrait de l’annexe de code SQL. |
 | 1.0 | 10/12/2024 | Version validée par le CNIG. |
 | 1.0.1 | 16/07/2025 | Version correctrice : clefs étrangères de `typevulnerabilite`, renommage des champs `descript` pour la livraison shapefile et cohérence nommage des métadonnées. Ajout du risque naturel Tsunami (19) de la nomenclature GASPAR.|
-| 1.1.0 | 14/11/2025 | Version correctrice : enrichissement des règles de nommage des tables et fichiers et allongement de la taille du champ `codeProcedure` pour être compatible avec les conventions de GASPAR Nouvelle Génération (NG). |
+| 1.0.2 | 14/11/2025 | Version correctrice : enrichissement des règles de nommage des tables et fichiers et allongement de la taille du champ `codeProcedure` pour être compatible avec les conventions de GASPAR Nouvelle Génération (NG). |
 
 ## Participation à l'écriture
 
@@ -1174,7 +1174,7 @@ Le modèle physique implémenté avec GeoPackage est un modèle de données rela
 **Exigence**
 La granularité d'une livraison est celle d'une procédure associée à un plan de prévention des risques (un code de procédure). Autrement dit une livraison comprend l'ensemble des tables associées à une procédure identifiée dans GASPAR par son code procédure.
 
-Des gabarits au format GeoPackage implémentant la stucture des tables décrites par ce standard sont diponibles sur le [dépot github des geostandards risques](https://github.com/cnigfr/Geostandards-risques-ppr/tree/master/standard/gabarits).
+Des gabarits au format GeoPackage implémentant la structure des tables décrites par ce standard sont disponibles sur le [dépot github des geostandards risques](https://github.com/cnigfr/Geostandards-risques-ppr/tree/master/standard/gabarits).
 
 **Exigence**
 La livraison d'un plan de prévention des risques au format GeoPackage se fera sous la forme d'un seul et unique fichier comprenant les données et les métadonnées. Les métadonnées peuvent en plus être fournies dans un fichier séparé pour alimenter un dispositif de catalogage.
