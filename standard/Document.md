@@ -2357,7 +2357,6 @@ Pour chaque élément de données il est indiqué :
 - la localisation XPath de l'élément dans la structure XML du fichier de métadonnées correspondant implémentant la norme ISO 19115 ;
 - les "valeurs" ou les *consignes de saisie des valeurs* pour l'élément à chacun des niveaux de granularité.
 
-
 ### Consignes de nommage du fichier de métadonnées
 
 Les règles suivantes sont à appliquer pour nommer le fichier de métadonnées : 
@@ -2365,11 +2364,8 @@ Les règles suivantes sont à appliquer pour nommer le fichier de métadonnées 
 | Niveau de granularité | Nom du fichier  | 
 |-|-|
 | Métadonnées générales | `MTD_geostandard-ppr.xml` |
-| Métadonnées d'un PPR | *Réutiliser le même formalisme que le nom de fichier de la livraison en GeoPackage* : "\[TypePPR\]_\[codegasparcomplet\]". *Exemple pour la Métadonnée du PPRN-I du Bassin Versant de la Scie* : "MTD_pprn_76ddtm20120001.xml" |
-| Métadonnées d'une thématique  | *Réutiliser le même formalisme que le nom de table concernée de la livraison en GeoPackage* : "\[TypePPR\]_\[codegasparcomplet\]". *Exemple pour le fichier de Métadonnées de la table zonealeareference_112 du PPRN-I du Bassin Versant de la Scie* : "pprn_76ddtm20120001_zonealeareference_112.xml" |
-
-
-
+| Métadonnées d'un PPR | *Réutiliser le même formalisme que le nom de fichier de la livraison en GeoPackage* : "\[PrefixePPR\]". *Exemple pour la Métadonnée du PPRN-I du Bassin Versant de la Scie* : "MTD_pprn_76ddtm20120001.xml" |
+| Métadonnées d'une thématique  | *Réutiliser le même formalisme que le nom de table concernée de la livraison en GeoPackage* : "\[PrefixePPR\]". *Exemple pour le fichier de Métadonnées de la table zonealeareference_135 du PPRN-Mvt du Bassin Puy-en-Velay* : "pprn_mvt_2022_0001_zonealeareference_135.xml" |
 
 ### Éléments de métadonnées relatifs à l'identification des données
 
@@ -2439,8 +2435,8 @@ Les règles suivantes sont à appliquer pour nommer le fichier de métadonnées 
 | Niveau de granularité | Valeur ou consigne de saisie  |
 |-|-|
 | Métadonnées générales | "https://geostandards.gouv.fr/risques/ppr" |
-| Métadonnées d'un PPR | "https://geostandards.gouv.fr/risques/ppr/*typeppr*/*codegasparcomplet*". Exemple : "https://geostandards.gouv.fr/risques/ppr/pprn-i/76DDTM20120001" |
-| Métadonnées d'une thématique | "https://geostandards.gouv.fr/risques/ppr/*typeppr*/*codegasparcomplet*/*nomthematique*". Exemple (pour la table d'aléa référence 112) : "https://geostandards.gouv.fr/risques/ppr/pprn-i/76DDTM20120001/zonealeareference_112" |
+| Métadonnées d'un PPR | "https://geostandards.gouv.fr/risques/ppr/*prefixeppr*". Exemple : "https://geostandards.gouv.fr/risques/ppr/pprn_76ddtm20120001" |
+| Métadonnées d'une thématique | "https://geostandards.gouv.fr/risques/ppr/*prefixeppr*/*nomthematique*". Exemple (pour la table d'aléa référence 135) : "https://geostandards.gouv.fr/risques/ppr/pprn_mvt_2022_0001/zonealeareference_135" |
 
 
 #### Langue de la ressource
@@ -2753,7 +2749,7 @@ Pour chaque mesure de la qualité (cf. Partie [Qualité des données](#qualité)
 | Niveau de granularité | Valeur ou consigne de saisie  |
 |-|-|
 | Métadonnées générales | `MTD-Geostandard-PPR` |
-| Métadonnées d'un PPR | *Réutiliser le même formalisme que le nom de fichier de la livraison en GeoPackage* : "\[TypePPR\]_\[codegasparcomplet\]". Exemple pour la Métadonnée du PPRN-I du Bassin Versant de la Scie : "pprn_76ddtm20120001" |
+| Métadonnées d'un PPR | *Réutiliser le même formalisme que le nom de fichier de la livraison en GeoPackage* : "\[PrefixePPR\]". Exemple pour la Métadonnée du PPRN-I du Bassin Versant de la Scie : "pprn_76ddtm20120001" |
 | Métadonnées d'une thématique | *Réutiliser le nom de la table associée à la thématique* |
 
 
@@ -2833,8 +2829,7 @@ Le tableau suivant indique comment composer les parties du nom d'une table GeoPa
 
 | Partie du nom | Information source |
 |-|-|
-| \[TypePPR\] | La valeur à renseigner est obtenue en convertissant en minuscules la partie `PPRN` (PPR Naturel) ou `PPRT` (PPR Technologique) du nom des tables du jeu de données COVADIS. |
-| \[CodeGASPARComplet\] | La valeur à renseigner est obtenue en récupérant la valeur de l'attribut  `ID_GASPAR` de n'importe quelle table du jeu de données COVADIS. |
+| \[PrefixePPR\] | La valeur à renseigner est obtenue en récupérant la valeur de l'attribut  `ID_GASPAR` de n'importe quelle table du jeu de données COVADIS et en l'adaptant selon les règles définies dans le paragraphe [Nom du fichier de livraison](#nom-du-fichier-de-livraison). |
 | \[nom table\] |  Le nom de la table est à renseigner au cas par cas en fonction des paragraphes qui suivent |
 | \[code aléa si table d'alea\] | Le code aléa est à remplir pour les tables de la thématique Aléas. La récupération de la valeur à renseigner sera détaillée dans les paragraphes dédiés à ces tables. |
 | \[type de geometrie\] | La valeur à renseigner (`s`, `l` ou `p`) est déduite de la partie `_S_`, `_L_` ou `_P_` de la table COVADIS d'origine 
@@ -2846,7 +2841,7 @@ Le tableau suivant indique comment composer les parties du nom d'une table GeoPa
 
 Les objets de la classe Procedure sont créés à partir de ceux de la classe DocumentPPR avec une correspondance exacte : un objet de la classe DocumentPPR génère un objet de la classe Procedure. 
 
-Cette classe est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_procedure](#table-prefixeppr_procedure). Ses attributs sont renseignés selon les correspondances suivantes :
+Cette classe est implémentée par la table [\[PrefixePPR\]\_procedure](#table-prefixeppr_procedure). Ses attributs sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -2860,7 +2855,7 @@ Cette classe est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\
 
 La classe ReferenceInternet n'existait pas dans l'ancien standard, elle a été créée pour les besoins du nouveau standard. La génération de ses objets est effectuée à partir des objets de l'ancienne classe DocumentPPR avec une correspondance exacte : un objet de la classe DocumentPPR génère un objet de la classe ReferenceInternet. 
 
-Cette classe est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_referenceinternet](#table-prefixeppr_referenceinternet). Ses attributs sont renseignés selon les correspondances suivantes :
+Cette classe est implémentée par la table [\[PrefixePPR\]\_referenceinternet](#table-prefixeppr_referenceinternet). Ses attributs sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS|
 |-|-|-|-|
@@ -2878,7 +2873,7 @@ Les objets de la classe Perimetre sont créés à partir ceux de la classe Perim
 
 A noter que dans l'ancien standard, l'avancement de la procédure était porté par la classe DocumentPPR (attribut "etat") et non le périmètre. Pour la traduction des données de l'ancien standard, la valeur de l'attribut "etat" de l'objet DocumentPPR rattaché au perimetre sera donc utilisée pour les périmètres générés pour le nouveau standard.
 
-La classe Perimetre est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_perimetre_s](#table-prefixeppr_perimetre_s). Ses attributs sont renseignés selon les correspondances suivantes :
+La classe Perimetre est implémentée par la table [\[PrefixePPR\]\_perimetre_s](#table-prefixeppr_perimetre_s). Ses attributs sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -2894,7 +2889,7 @@ Les objets de la classe PerimetreEtude sont créés à partir ceux de la classe 
 
 A noter que dans l'ancien standard, l'avancement de la procédure était porté par la classe DocumentPPR (attribut "etat") et non le périmètre. Pour la traduction des données de l'ancien standard, la valeur de l'attribut "etat" de l'objet DocumentPPR rattaché au perimetre sera donc utilisée pour les périmètres générés pour le nouveau standard.
 
-La classe Perimetre est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_perimetre_s](#table-prefixeppr_perimetre_s). Ses attributs sont renseignés selon les correspondances suivantes :
+La classe Perimetre est implémentée par la table [\[PrefixePPR\]\_perimetre_s](#table-prefixeppr_perimetre_s). Ses attributs sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -2919,7 +2914,7 @@ Ce sont ces classes qui seront remplies à partir des objets de la classe ZoneAl
 
 L'ancien standard ne définissait qu'une classe pour les zones d'aléas. Par défaut, on considère que les objets de la classe ZoneAleaPPR décrivent l'aléa de référence dans le cadre des PPR Naturels.  Dans ce cas, un objet de l'ancienne classe ZoneAleaPPR sera converti en un objet de la classe ZoneAleaReference. Les exceptions seront précisées pour chacune des classes du nouveau standard.
 
-La classe ZoneAleaReference est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonealeareference\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeareference_codealea_s). Ses attributs sont renseignés selon les correspondances suivantes :
+La classe ZoneAleaReference est implémentée par la table [\[PrefixePPR\]\_zonealeareference\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeareference_codealea_s). Ses attributs sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -2952,21 +2947,21 @@ La table de synthèse est à remplir selon les mêmes règles que pour les table
 
 L'ancien Standard COVADIS PPR n'identifie pas en tant que telles les zones d'aléas relatives à l'aléa à échéance 100 ans. Cette table ne sera donc générée lors de la transposition d'un ancien PPR vers le nouveau modèle que s'il est indiqué que les objets de la classe ZoneAleaPPR décrivent en particulier cet aléa. 
 
-Cette classe est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonealeaecheance100ans\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeaecheance100ans_codealea_s). Ses attributs sont renseignés selon les mêmes correspondances que pour ZoneAleaReference. La valeur de typealea vaudra systématiquement "117" (aléa submersion marine)
+Cette classe est implémentée par la table [\[PrefixePPR\]\_zonealeaecheance100ans\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeaecheance100ans_codealea_s). Ses attributs sont renseignés selon les mêmes correspondances que pour ZoneAleaReference. La valeur de typealea vaudra systématiquement "117" (aléa submersion marine)
 
 
 ### Remplissage des objets de la classe ZoneAleaExceptionnel
 
 L'ancien Standard COVADIS PPR n'identifie pas en tant que telles les zones d'aléas relatives à l'aléa exceptionnel pour le risque avalanche. Cette table ne sera donc générée lors de la transposition d'un ancien PPR vers le nouveau modèle que s'il est indiqué que les objets de la classe ZoneAleaPPR décrivent en particulier cet aléa. 
 
-Cette classe est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonealeaexceptionnel\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeaexceptionnel_codealea_s). Ses attributs sont renseignés selon les mêmes correspondances que pour ZoneAleaReference. La valeur de `typealea` vaudra systématiquement "14" (aléa avalanches). 
+Cette classe est implémentée par la table [\[PrefixePPR\]\_zonealeaexceptionnel\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeaexceptionnel_codealea_s). Ses attributs sont renseignés selon les mêmes correspondances que pour ZoneAleaReference. La valeur de `typealea` vaudra systématiquement "14" (aléa avalanches). 
 
 
 ### Remplissage des objets de la classe ZoneAleaTechnoRapide
 
 L'ancien standard ne définissait qu'une classe pour les zones d'aléas, que le PPR soit Naturel ou technologique. Dans le cas où la zone d'aléa décrit un risque technologique industriel (CODERISQUE de type "21xxxx") les objets de la table ZONE\_ALEA\_PPRT correspondants peuvent être convertis en objets de la table ZoneAleaTechnoRapide si des éléments permettent de les identifier comme des zones d'aléa à cinétique rapide.
 
-La classe ZoneAleaTechnoRapide est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonealeatechnorapide\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeatechnorapide_codealea_s). Ses attributs sont renseignés selon les correspondances suivantes :
+La classe ZoneAleaTechnoRapide est implémentée par la table [\[PrefixePPR\]\_zonealeatechnorapide\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeatechnorapide_codealea_s). Ses attributs sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -2984,7 +2979,7 @@ La classe ZoneAleaTechnoRapide est implémentée par la table [\[TypePPR\]\_\[Co
 
 L'ancien standard ne définissait qu'une classe pour les zones d'aléas, que le PPR soit Naturel ou technologique. Dans le cas où la zone d'aléa décrit un risque technologique industriel (CODERISQUE de type "21xxxx") les objets de la table ZONE\_ALEA\_PPRT correspondants peuvent être convertis en objets de la table ZoneAleaTechnoLent si des éléments permettent de les identifier comme des zones d'aléa à cinétique lente.
 
-La classe ZoneAleaTechnoLent est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonealeatechnolent\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeatechnolent_codealea_s). Ses attributs sont les mêmes que ceux de la table ZoneAleaTechnoRapide et les règles de passage identiques s'appliquent.
+La classe ZoneAleaTechnoLent est implémentée par la table [\[PrefixePPR\]\_zonealeatechnolent\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeatechnolent_codealea_s). Ses attributs sont les mêmes que ceux de la table ZoneAleaTechnoRapide et les règles de passage identiques s'appliquent.
 
 A noter que certains attributs obligatoires dans le nouveau standard tel que "intensite" ne pourront être renseignés automatiquement à partir de champs de l'ancien standard. Une reprise manuelle de cette table devra être réalisée afin de compléter ces éléments et rendre les informations de la table conformes aux exigences du nouveau standard.
 
@@ -2992,7 +2987,7 @@ A noter que certains attributs obligatoires dans le nouveau standard tel que "in
 
 L'ancien standard ne définissait qu'une classe pour les zones d'aléas, que le PPR soit Naturel ou technologique. Dans le cas où la zone d'aléa décrit un risque technologique industriel (CODERISQUE de type "21xxxx") les objets de la table ZONE\_ALEA\_PPRT correspondants peuvent être convertis en objets de la table ZoneAleaTechnoProjection si des éléments permettent de les identifier comme des zones d'aléa à cinétique rapide à effet de projection.
 
-La classe ZoneAleaTechnoProjection est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonealeatechnoprojection\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeatechnoprojection_codealea_s). Ses attributs sont les mêmes que ceux de la table ZoneAleaTechnoRapide et les règles de passage identiques s'appliquent.
+La classe ZoneAleaTechnoProjection est implémentée par la table [\[PrefixePPR\]\_zonealeatechnoprojection\_\[CodeAlea\]\_s](#table-prefixeppr_zonealeatechnoprojection_codealea_s). Ses attributs sont les mêmes que ceux de la table ZoneAleaTechnoRapide et les règles de passage identiques s'appliquent.
 
 A noter que certains attributs obligatoires dans le nouveau standard tel que "intensite" ne pourront être renseignés automatiquement à partir de champs de l'ancien standard. Une reprise manuelle de cette table devra être réalisée afin de compléter ces éléments et rendre les informations de la table conformes aux exigences du nouveau standard.
 
@@ -3001,10 +2996,10 @@ A noter que certains attributs obligatoires dans le nouveau standard tel que "in
 Le standard COVADIS permet de décrire des zones d'aléas "multirisques", c'est à dire des zones sur lesquelles plusieurs types d'aléas s'appliquent avec pour chacun d'eux un niveau d'aléa particulier. Ces zones d'aléas sont identifiées dans la table N\_ZONE\_ALEA\_PPRT\_\[AAAANNNN\]\_S\_\[DDD\] par un CODERISQUE égal à 999999, la description des risques particuliers associés à ces zones étant gérées dans une table N\_MULTIALEA\_PPRX\_\[AAAANNNN\]\_\[DDD\]. 
 
 Le nouveau standard reprend aussi ce mécanisme de zones multirisques en proposant des tables permettant de représenter une synthèse des zones d'aléas : 
-* [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonealeatechnosynthese\_s](#table-prefixeppr_zonealeatechnosynthese_s) et 
-* [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonemultialeatechno](#table-prefixeppr_zonemultialeatechno) pour les risques technologiques multiples ;
+* [\[PrefixePPR\]\_zonealeatechnosynthese\_s](#table-prefixeppr_zonealeatechnosynthese_s) et 
+* [\[PrefixePPR\]\_zonemultialeatechno](#table-prefixeppr_zonemultialeatechno) pour les risques technologiques multiples ;
 
-La table de synthèse est à remplir selon les mêmes règles que pour les tables de zones d'aléas précédentes. La table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonemultialeatechno](#table-prefixeppr_zonemultialeatechno) est à remplir selon les règles de passage suivantes :
+La table de synthèse est à remplir selon les mêmes règles que pour les tables de zones d'aléas précédentes. La table [\[PrefixePPR\]\_zonemultialeatechno](#table-prefixeppr_zonemultialeatechno) est à remplir selon les règles de passage suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -3027,7 +3022,7 @@ Dans l'ancien standard PPR, les zones protégées n'étaient pas représentées.
 
 L'ancien Standard COVADIS PPR n'identifie pas en tant que telles les zones de danger spécifiques. Cependant, certains objets de la classe ZoneAleaPPR peuvent représenter de telles zones avec une indication en ce sens dans le champ "description" de la table. Lorsque c'est le cas, ces objets particuliers de la classe ZoneAleaPPR permettront de générer les objets de la classe ZoneDangerSpecifique. 
 
-Cette classe est implémentée par la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonedangerspecifique\_\[CodeAlea\]\_s](#table-prefixeppr_zonedangerspecifique_codealea_s). Ses attributs sont renseignés selon les correspondances suivantes :
+Cette classe est implémentée par la table [\[PrefixePPR\]\_zonedangerspecifique\_\[CodeAlea\]\_s](#table-prefixeppr_zonedangerspecifique_codealea_s). Ses attributs sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS|
 |-|-|-|-|
@@ -3049,7 +3044,7 @@ L'ancien standard ne définissait qu'une classe pour les zones réglementaires. 
 
 La propriété "existemesuresobligatoires" ne pourra pas être renseignée automatiquement car l'information n'était pas indiquée dans l'ancien Standard. Elle pourra être laissée non renseignée, signifiant ainsi que l'existence ou non d'obligation d'application de mesures de réduction de la vulnérabilité est inconnue sur la zone.
 
-Les attributs de la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonereglementaireurba\_\[slp\]](#tables-prefixeppr_zonereglementaireurba_slp) qui implémente la classe ZoneReglementaireUrba sont renseignés selon les correspondances suivantes :
+Les attributs de la table [\[PrefixePPR\]\_zonereglementaireurba\_\[slp\]](#tables-prefixeppr_zonereglementaireurba_slp) qui implémente la classe ZoneReglementaireUrba sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -3065,7 +3060,7 @@ Les attributs de la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonereglementaire
 
 L'ancien standard ne définissait qu'une classe pour les zones réglementaires. Les objets de la classe ZoneReglementaireUrba seront créés à partir des objets de la classe ZonePPR dont l'attribut typeReglementStandardise porte une valeur représentant une réglementation en matière d'urbanisme, à savoir : "Délaissement possible" ou "Expropriation possible".
 
-Les attributs de la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonereglementairefoncier\_\[slp\]](#tables-prefixeppr_zonereglementairefoncier_slp) qui implémente la classe ZoneReglementaireFoncier sont renseignés selon les correspondances suivantes :
+Les attributs de la table [\[PrefixePPR\]\_zonereglementairefoncier\_\[slp\]](#tables-prefixeppr_zonereglementairefoncier_slp) qui implémente la classe ZoneReglementaireFoncier sont renseignés selon les correspondances suivantes :
 
 |Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
@@ -3078,7 +3073,7 @@ Les attributs de la table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zonereglementaire
 
 ### Remplissage des objets de la table zoneregmultialea
 
-Le nouveau standard introduit la possibilité d'associer des types d'aléas aux zones réglementaires dans le cas des PPR Multirisques. Cela s'implémente à l'aide d'une table [\[TypePPR\]\_\[CodeGASPARComplet\]\_zoneregmultialea](#tables-prefixeppr_zoneregmultialea) qui fait le lien entre les objets des tables du zonage réglementaire et la classification des aléas.
+Le nouveau standard introduit la possibilité d'associer des types d'aléas aux zones réglementaires dans le cas des PPR Multirisques. Cela s'implémente à l'aide d'une table [\[PrefixePPR\]\_zoneregmultialea](#tables-prefixeppr_zoneregmultialea) qui fait le lien entre les objets des tables du zonage réglementaire et la classification des aléas.
 
 Dans le cadre de la transformation d'un PPR Multirisques COVADIS vers le nouveau standard, cette table ne pourra pas être générée à partir du fichier COVADIS qui ne porte pas cette information.
 
@@ -3091,7 +3086,7 @@ Le Standard COVADIS définit une classe EnjeuPPR, permettant d'identifier de tel
 
 Les objets de la classe Enjeu seront créés à partir de ceux de la classe COVADIS EnjeuPPR, un objet de cette dernière générant un objet de la classe Enjeu du nouveau Standard. Dans le contexte d'une transformation d'un PPR COVADIS existant on utilisera systématiquement la nomenclature COVADIS pour classer les nouveaux objets d'enjeux créés.
 
-La classe Enjeu est implémentée par les tables [\[TypePPR\]\_\[CodeGASPARComplet\]\_enjeu\_\[slp\]](#tables-prefixeppr_enjeu_slp) en fonction du type de géométrie des enjeux représentés. Les règles correspondantes avec le standard COAVDIS pour les propriétés sont les suivantes :
+La classe Enjeu est implémentée par les tables [\[PrefixePPR\]\_enjeu\_\[slp\]](#tables-prefixeppr_enjeu_slp) en fonction du type de géométrie des enjeux représentés. Les règles correspondantes avec le standard COAVDIS pour les propriétés sont les suivantes :
 
 
 | Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
@@ -3111,7 +3106,7 @@ La classe Enjeu est implémentée par les tables [\[TypePPR\]\_\[CodeGASPARCompl
 
 Le Standard COVADIS définit une classe équivalente OrigineRisque avec les caractéristiques suivantes : un nom ("NOM"), le nom du système d'information ou de la base de données externe qui gère l'objet à l'origine du risque ("NOM_SI_EXT") et l'identifiant à utiliser pour faire référence à l'objet du SI externe correspondant l'entité à l'origine du risque ("ID_SI_EXT").
 
-Les objets de la classe OrigineRisque seront créés à partir de ceux de la classe COVADIS OrigineRisque, un objet de cette dernière générant un objet de la classe OrigineRisque du nouveau Standard. Les règles de correspondances pour les propriétés des tables [\[TypePPR\]\_\[CodeGASPARComplet\]\_originerisque\_\[slp\]](#tables-prefixeppr_originerisque_slp) qui l'implémentent selon le type de géométrie des objets représentés sont les suivantes :
+Les objets de la classe OrigineRisque seront créés à partir de ceux de la classe COVADIS OrigineRisque, un objet de cette dernière générant un objet de la classe OrigineRisque du nouveau Standard. Les règles de correspondances pour les propriétés des tables [\[PrefixePPR\]\_originerisque\_\[slp\]](#tables-prefixeppr_originerisque_slp) qui l'implémentent selon le type de géométrie des objets représentés sont les suivantes :
 
 | Nom Attribut|Exemple de valeur|Table COVADIS| Nom attribut COVADIS |
 |-|-|-|-|
