@@ -1114,7 +1114,6 @@ Le tableau suivant précise, dans le cadre des PPRT, les recommandations de repr
 | [ZoneAleaTechnoProjection](#classe-dobjets-zonealeatechnoprojection) Courbe enveloppe des effets graves de projection (zone "Z3") | ![StyleAleaTechnoProjZ3](./ressources/couleur-alea-techno-proj-z3.png) | 
 | [ZoneAleaTechnoProjection](#classe-dobjets-zonealeatechnoprojection) Courbe enveloppe des effets indirects de projection (zone "Z5") | ![StyleAleaTechnoProjZ3](./ressources/couleur-alea-techno-proj-z5.png) | 
 
-
 ## Représentation des types de réglementations standardisés
 
 Les tableaux suivants présentent les couleurs (en code RVB) préconisées à appliquer pour une représentation des réglementations standardisées en fonction du type de PPR et du type de réglementation (en matière d'urbanisme ou foncière). 
@@ -1125,7 +1124,6 @@ Ces recommandations permettent de représenter une synthèse du zonage réglemen
 
 ### Représentation des types de réglementations en matière d'urbanisme
 
-
 | Type de réglementation | PPRN | PPRT | 
 |-|-|-|
 | Prescriptions hors zone d'aléa | R137 V217 B231 ![StyleReg01PPRNT](./ressources/couleur-reg-pprnt-01.png) | R137 V217 B231 ![StyleReg01PPRNT](./ressources/couleur-reg-pprnt-01.png) | 
@@ -1135,7 +1133,6 @@ Ces recommandations permettent de représenter une synthèse du zonage réglemen
 | Recommandations | R178 V223 B138 ![StyleReg05PPRNT](./ressources/couleur-reg-pprnt-05-recommandations.png) | R178 V223 B138 ![StyleReg05PPRNT](./ressources/couleur-reg-pprnt-05-recommandations.png) | 
 | Zone grises | N.A. | R188 V188 B188 ![StyleRegGrisPPRT](./ressources/couleur-reg-pprt-gris.png) | 
 | Zones d'aléa exceptionnel (AE) | ![StyleRegJaunePPRNAE](./ressources/couleur-reg-pprn-ae.png) | N.A. | 
-
 
 ### Représentation des types de réglementations foncières
 
@@ -1149,10 +1146,6 @@ Ces recommandations permettent de représenter une synthèse du zonage réglemen
 Le format de livraison des données des plans de prévention des risques est le format GeoPackage. La partie [Livraison en GeoPackage](#livraison-en-geopackage) en précise les modalités.
 
 Une [livraison au format Shapefile](#livraison-au-format-shapefile) est néanmoins possible pour des raisons de compatibilité avec le système Geo-IDE qui est encore utilisé pour le partage de données PPR et ne supporte pas actuellement l'import de données GeoPackage.
-
-## PrefixePPR pour les livraisons
-
-Que ce soit en GeoPackage ou en Shapefile, les noms des fichiers et des tables d'appuient sur un
 
 ## Livraison en GeoPackage
 
@@ -1212,7 +1205,7 @@ Où :
   * année de prescription : [AAAA]
   * numéro incrémental à quatre chiffres remis à zéro chaque année [nnnn]
 
-A titre d'exemple, le fichier de livraison du PPRN Inondation du Bassin de la Scie aura pour nom :
+A titre d'exemple, le fichier de livraison du PPRN Inondation du Bassin de la Scie (2012) aura pour nom :
 `pprn_76ddtm20120001.gpkg`
 
 ##### PPR postérieurs à GASPAR Nouvelle Génération (à partir de 2022)
@@ -1242,7 +1235,7 @@ Où :
 * `[AAAA]` est l'année de création de la procédure ;
 * `[nnnn]` est le numéro incrémental attribué à la procédure dans GASPAR dans l'année de création.
 
-A titre d'exemple, le fichier de livraison du PPRN Mouvement de terrain du bassin du Puy-en-Velay aura pour nom : `pprn_mvt_2022_0001.gpkg`
+A titre d'exemple, le fichier de livraison du PPRN Mouvement de terrain (2022) du bassin du Puy-en-Velay aura pour nom : `pprn_mvt_2022_0001.gpkg`
 
 Note : Cette règle de nommage reprend le principe de la nouvelle nomenclature des identifiants GASPAR, tout en minuscules, avec le caractère "-" remplacé par "_".
 
@@ -1274,10 +1267,8 @@ La présence de cette table dans un fichier GeoPackage est obligatoire.
 
 Sa structure est définie dans [les spécifications du format GeoPackage](https://www.geopackage.org/spec131/#_contents). 
 
-
 **Exigence**
 La livraison en GeoPackage d'un Plan de Prévention des Risques doit contenir une table `gpkg_contents` conforme à la structure du format GeoPackage qui liste l'ensemble des tables du standard présentes dans la livraison.
-
 
 ##### Table gpkg_geometry_columns
 
@@ -2296,19 +2287,21 @@ Les noms des fichiers Shapefile associés à chaque table de la livraison suiven
 
 À titre d'exemples :
 
-* les fichiers Shapefile décrivant le périmetre du PPRN du Bassin versant de la Scie (code GASPAR : `76ddtm20120001` ) auront pour nom : 
-  - `pprn_76ddtm20120001_perimetre_s.shp` ;
-  - `pprn_76ddtm20120001_perimetre_s.dbf` ;
-  - `pprn_76ddtm20120001_perimetre_s.prj` ;
-  - (et autres fichiers additionnels éventuels `.shx`, `.cpg`, ...)
+* les fichiers Shapefile décrivant le périmetre du PPRN du Bassin versant de la Scie (code GASPAR : `76ddtm20120001` ) auront pour nom :
 
-* les fichiers shapefile implémentant la table zonealeareference du PPRN Mouvement de terrain du Bassin du Puy-en-Velay pour l'aléa "Mouvement de terrain" (code "135") aura pour nom : 
-  - `pprn_mvt_2022_0001_zonealeareference_135_s.shp` ;
-  - `pprn_mvt_2022_0001_zonealeareference_135_s.dbf` ;
-  - `pprn_mvt_2022_0001_zonealeareference_135_s.prj` ;
-  - (et autres fichiers additionnels éventuels `.shx`, `.cpg`, ...)
+  * `pprn_76ddtm20120001_perimetre_s.shp` ;
+  * `pprn_76ddtm20120001_perimetre_s.dbf` ;
+  * `pprn_76ddtm20120001_perimetre_s.prj` ;
+  * (et autres fichiers additionnels éventuels `.shx`, `.cpg`, ...)
 
-### Structure des tables 
+* les fichiers shapefile implémentant la table zonealeareference du PPRN Mouvement de terrain du Bassin du Puy-en-Velay pour l'aléa "Mouvement de terrain" (code "135") auront pour nom :
+
+  * `pprn_mvt_2022_0001_zonealeareference_135_s.shp` ;
+  * `pprn_mvt_2022_0001_zonealeareference_135_s.dbf` ;
+  * `pprn_mvt_2022_0001_zonealeareference_135_s.prj` ;
+  * (et autres fichiers additionnels éventuels `.shx`, `.cpg`, ...)
+
+### Structure des tables
 
 La structure des tables attributaires s'appuie sur la même structure de tables que celle décrite dans la partie [dictionnaire des tables](#dictionnaire-des-tables) de la livraison en GeoPackage ; les spécificités liées au format Shapefile comme le nom court des champs sont indiquées dans une colonne spécifique pour chaque table.
 
