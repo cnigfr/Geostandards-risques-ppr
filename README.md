@@ -10,7 +10,7 @@ Ce dépôt est le lieu des développements relatifs à la refonte du Géostandar
 
 Les versions en cours de ce géostandard sont accessibles ici :
 
-* [Version correctrice 1.0.1](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/diffusion/geostandards-risques-ppr-v1.0.1.pdf) en cours de publication sur le site du CNIG
+* [Version correctrice 1.0.2](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/diffusion/geostandards-risques-ppr-v1.0.2.pdf) en cours de publication sur le site du CNIG
 * [Version en cours de rédaction](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/Document.md)
 
 Ce standard s'appuie sur le Géostandard risques - Modèle commun dont les développements se déroulent sur le dépôt [Geostandards Risques](https://github.com/cnigfr/Geostandards-Risques)
