@@ -69,6 +69,8 @@ L’objectif est d'aboutir à terme à un consensus qui se traduise en un standa
 
 ### Actualisation
 
+La version correctrice 1.0.2 du standard est disponible et sera présentée à la prochaine commission des standards CNIG début 2026.
+
 La version correctrice 1.0.1 du standard a été approuvée en commission des standards le 12 juin 2025 et publiée le 16 juillet 2025.
 
 La version 1.0 de ce standard a été validée en commission des standards le 5 décembre 2024 et approuvée par le conseil plénier du CNIG le 10 décembre 2024.
