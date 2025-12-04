@@ -1,3 +1,6 @@
-# Ressources
+# Jeux-tests du GéoStandard PPR
 
-_Indiquer ici les informations utiles pour trouver et utiliser les ressources._
+Ce répertoire contient des exemples de PPRs conformes au nouveau standard :
+
+- [PPR Naturels](./PPRN/)
+- [PPR Technologiques](./PPRT/)
