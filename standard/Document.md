@@ -1807,30 +1807,29 @@ Elle a la structure et le contenu suivants :
 | 18 | Risque Naturel ; Radon |
 | 19 | Risque Naturel ; Tsunami |
 | 211	| Risque technologique ; Risque Industriel ; Effet thermique |
-| 212	| Risque technologique ; Risque Industriel ; Effet de surpression | 
+| 212	| Risque technologique ; Risque Industriel ; Effet de surpression |
 | 213	| Risque technologique ; Risque Industriel ; Effet toxique  |
 | 214	| Risque technologique ; Risque Industriel ; Effet de projection |
 | 22	| Risque technologique ; Nucléaire |
 | 23	| Risque technologique ; Rupture de barrage |
 | 24	| Risque technologique ; Transport de marchandises dangereuses |
 | 25	| Risque technologique ; Engins de guerre |
-| 311	| Risque minier ; Affaissement minier ; Effondrements généralisés | 
-| 312	| Risque minier ; Affaissement minier ; Effondrements localisés | 
-| 313	| Risque minier ; Affaissement minier ; Affaissements progressifs | 
-| 314	| Risque minier ; Affaissement minier ; Tassements | 
+| 311	| Risque minier ; Affaissement minier ; Effondrements généralisés |
+| 312	| Risque minier ; Affaissement minier ; Effondrements localisés |
+| 313	| Risque minier ; Affaissement minier ; Affaissements progressifs |
+| 314	| Risque minier ; Affaissement minier ; Tassements |
 | 315	| Risque minier ; Affaissement minier ; Glissements ou mouvements de pente |
-| 316	| Risque minier ; Affaissement minier ; Coulées | 
-| 317	| Risque minier ; Affaissement minier ; Ecroulements rocheux | 
+| 316	| Risque minier ; Affaissement minier ; Coulées |
+| 317	| Risque minier ; Affaissement minier ; Ecroulements rocheux |
 | 321	| Risque minier ; Inondations de terrains miniers ; Pollution des eaux souterraines et de surface |
 | 322	| Risque minier ; Inondations de terrains miniers ; Pollution des sédiments et des sols |
 | 33 | Risque minier ; Emissions en surface de gaz de mine |
 | 34 | Risque minier ; Echauffement des terrains de dépôts |
 | 999 | Risques multiples |
 
-
 ###### Table d'énumération `typeniveaualea`
 
-La table `typeniveaualea` implémente l'énumération [TypeNiveauAlea](https://github.com/cnigfr/Geostandards-Risques/blob/main/standards/Geostandards-risques-commun/Document.md#enumeration-typeniveaualea) définie dans le modèle commun.
+La table `typeniveaualea` implémente l'énumération [TypeNiveauAlea](#enumeration-typeniveaualea).
 
 Elle a la structure et le contenu suivants :
 
@@ -1846,7 +1845,6 @@ Elle a la structure et le contenu suivants :
 | 07 | Très fort plus ou aggravé |
 | 99 | Autre |
 
-
 ###### Table d'énumération `typesuralea`
 
 La table `typesuralea` implémente l'énumération [TypeSurAlea](#enumeration-typesuralea) définie dans le modèle conceptuel.
@@ -1855,12 +1853,11 @@ Elle a la structure et le contenu suivants :
 
 | `code` TEXT(2) | `libelle` TEXT(50) |
 |-|-|
-| 01 | Bande de précaution | 
+| 01 | Bande de précaution |
 | 02 | Bande particulière |
 | 03 | Bande particulière chocs de vagues |
 | 04 | Bande particulière projection de matériaux |
 | 99 | Autre |
-
 
 ###### Table d'énumération `typeouvrageprotecteur`
 
