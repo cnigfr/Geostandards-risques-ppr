@@ -12,6 +12,6 @@ Ce dossier contient les gabarits Geopackage du standard PPR pour chaque zone de 
 
 Tous ces gabarits sont générés en lançant le bash genGabarits.sh qui nécessite l'installation préalable de de sqlite3 et la présence des fichiers suivants :
 
-- [typeppr_codegasparppr-vide.gpkg](prefixeppr-vide.gpkg) fichier Geopackage minimal
+- [prefixeppr-vide.gpkg](prefixeppr-vide.gpkg) fichier Geopackage minimal
 - [prefixeppr.sql](prefixeppr.sql) code SQL de création des tables du standard
 
