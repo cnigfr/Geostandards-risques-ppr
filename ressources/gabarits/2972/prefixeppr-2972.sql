@@ -5,11 +5,107 @@
  * La variable 2972 doit être remplacé par l'indentifiant du srs correspondant à la zone de projection du jeu de données (ex: "2154" pour la France Métropolitaine )
  * 
  */
+/**
+ * création de la structure GeoPackage de référence (1.2)
+ */
+PRAGMA application_id = 1196437808;
+PRAGMA user_version = 10200;
+
+/**
+ * Création des tables de métadonnées du GeoPackage
+ */ 
+
+/* Table: gpkg_spatial_ref_sys */
+CREATE TABLE gpkg_spatial_ref_sys (
+  srs_name TEXT NOT NULL,
+  srs_id INTEGER NOT NULL PRIMARY KEY,
+  organization TEXT NOT NULL,
+  organization_coordsys_id INTEGER NOT NULL,
+  definition TEXT NOT NULL,
+  description TEXT
+);
+
+/* Table: gpkg_contents */
+CREATE TABLE gpkg_contents (
+  table_name TEXT NOT NULL PRIMARY KEY,
+  data_type TEXT NOT NULL,
+  identifier TEXT UNIQUE,
+  description TEXT DEFAULT '',
+  last_change DATETIME NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  min_x DOUBLE,
+  min_y DOUBLE,
+  max_x DOUBLE,
+  max_y DOUBLE,
+  srs_id INTEGER,
+  CONSTRAINT fk_gc_r_srs_id FOREIGN KEY (srs_id)
+    REFERENCES gpkg_spatial_ref_sys(srs_id)
+);
+
+/* Table: gpkg_geometry_columns */
+CREATE TABLE gpkg_geometry_columns (
+  table_name TEXT NOT NULL,
+  column_name TEXT NOT NULL,
+  geometry_type_name TEXT NOT NULL,
+  srs_id INTEGER NOT NULL,
+  z TINYINT NOT NULL,
+  m TINYINT NOT NULL,
+  CONSTRAINT pk_geom_cols PRIMARY KEY (table_name, column_name),
+  CONSTRAINT fk_gc_tn FOREIGN KEY (table_name)
+    REFERENCES gpkg_contents(table_name),
+  CONSTRAINT fk_gc_srs FOREIGN KEY (srs_id)
+    REFERENCES gpkg_spatial_ref_sys(srs_id)
+);
+
+
+/* Table: gpkg_extensions */
+CREATE TABLE gpkg_extensions (
+  table_name TEXT,
+  column_name TEXT,
+  extension_name TEXT NOT NULL,
+  definition TEXT NOT NULL,
+  scope TEXT NOT NULL,
+  CONSTRAINT ge_pk PRIMARY KEY (table_name, column_name, extension_name)
+);
+
+
+/* Table: gpkg_metadata */
+CREATE TABLE gpkg_metadata (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  md_scope TEXT NOT NULL DEFAULT 'dataset',
+  md_standard_uri TEXT NOT NULL,
+  mime_type TEXT NOT NULL DEFAULT 'text/xml',
+  metadata TEXT NOT NULL DEFAULT ''
+);
+
+/* Table: gpkg_metadata_reference */
+CREATE TABLE gpkg_metadata_reference (
+  reference_scope TEXT NOT NULL,
+  table_name TEXT,
+  column_name TEXT,
+  row_id_value INTEGER,
+  timestamp DATETIME NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  md_file_id INTEGER NOT NULL,
+  md_parent_id INTEGER,
+  CONSTRAINT fk_gmr_md FOREIGN KEY (md_file_id)
+    REFERENCES gpkg_metadata(id),
+  CONSTRAINT fk_gmr_parent FOREIGN KEY (md_parent_id)
+    REFERENCES gpkg_metadata(id)
+);
+
+/* Ajout des tables gpkg_metadata et gpkg_metadata_reference dans la table gpkg_extensions */
+INSERT INTO gpkg_extensions VALUES 
+  /* (table_name,column_name,extension_name,definition,scope) */
+  ('gpkg_metadata',null,'gpkg_metadata','http://www.geopackage.org/spec140/#extension_metadata','read-write'),
+  ('gpkg_metadata_reference',null,'gpkg_metadata','http://www.geopackage.org/spec140/#extension_metadata','read-write')
+ ;
+DELETE from gpkg_metadata ;
+DELETE from gpkg_metadata_reference ;
+
+
 
 /**
  * Insertion des systèmes de coordonnées dans la table gpkg_spatial_ref_sys
  */
-
 
 INSERT INTO gpkg_spatial_ref_sys VALUES 
   /* "EPSG:4326" imposé par GeoPackage*/
@@ -18,26 +114,15 @@ INSERT INTO gpkg_spatial_ref_sys VALUES
   ('Undefined cartesian',-1,'NONE',-1, 'undefined','undefined Cartesian coordinate reference system'),
   /* "0" imposé par GeoPackage pour les systèmes de référence géographiques non définis*/
   ('Undefined geographic',0,'NONE',0, 'undefined','undefined geographic coordinate reference system'),
-  /* Lambert-93 (RGF93LAMB93) - France métropolitaine */
-  ('Lambert-93 (RGF93LAMB93)',2154,'EPSG',2154, 'PROJCRS["RGF93 v1 / Lambert-93",BASEGEOGCRS["RGF93 v1",DATUM["Reseau Geodesique Francais 1993 v1",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4171]],CONVERSION["Lambert-93",METHOD["Lambert Conic Conformal (2SP)",ID["EPSG",9802]],PARAMETER["Latitude of false origin",46.5,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8821]],PARAMETER["Longitude of false origin",3,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8822]],PARAMETER["Latitude of 1st standard parallel",49,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8823]],PARAMETER["Latitude of 2nd standard parallel",44,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8824]],PARAMETER["Easting at false origin",700000,LENGTHUNIT["metre",1],ID["EPSG",8826]],PARAMETER["Northing at false origin",6600000,LENGTHUNIT["metre",1],ID["EPSG",8827]]],CS[Cartesian,2],AXIS["easting (X)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["northing (Y)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["France - onshore and offshore, mainland and Corsica (France métropolitaine including Corsica)."],BBOX[41.15,-9.86,51.56,10.38]],ID["EPSG",2154]]','France métropolitaine'),
-  /* RGAF09UTM20 - Antilles françaises */
-  ('Universal transverse Mercator fuseau 20 nord (RGAF09UTM20)',5490,'EPSG',5490, 'PROJCRS["RGAF09 / UTM zone 20N",BASEGEOGCRS["RGAF09",DATUM["Reseau Geodesique des Antilles Francaises 2009",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",5489]],CONVERSION["UTM zone 20N",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",-63,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",0,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["French Antilles onshore and offshore west of 60°W - Guadeloupe (including Grande Terre, Basse Terre, Marie Galante, Les Saintes, Iles de la Petite Terre, La Desirade); Martinique; St Barthélemy; northern St Martin."],BBOX[14.08,-63.66,18.31,-60]],ID["EPSG",5490]]','Antilles françaises (Guadeloupe,Saint-Martin,Saint-Barthélemy,Martinique)'),
-  /* RGFG95UTM22 - Guyane */
-  ('Universal transverse Mercator fuseau 22 nord (RGFG95UTM22)',2972,'EPSG',2972, 'PROJCRS["RGFG95 / UTM zone 22N",BASEGEOGCRS["RGFG95",DATUM["Reseau Geodesique Francais Guyane 1995",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4624]],CONVERSION["UTM zone 22N",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",-51,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",0,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["French Guiana - east of 54°W, onshore and offshore."],BBOX[2.17,-54,8.88,-49.45]],ID["EPSG",2972]]','Guyane'),
-  /* RGR92UTM40S - La Réunion */
-  ('Universal transverse Mercator fuseau 40 sud (RGR92UTM40S)',2975,'EPSG',2975, 'PROJCRS["RGR92 / UTM zone 40S",BASEGEOGCRS["RGR92",DATUM["Reseau Geodesique de la Reunion 1992",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4627]],CONVERSION["UTM zone 40S",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",57,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",10000000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["Reunion - onshore and offshore - east of 54°E."],BBOX[-24.72,54,-18.28,58.24]],ID["EPSG",2975]]','La Réunion'),
-  /* RGM04UTM38S - Mayotte */
-  ('Universal transverse Mercator fuseau 38 sud (RGM04UTM38S)',4471,'EPSG',4471, 'PROJCRS["RGM04 / UTM zone 38S",BASEGEOGCRS["RGM04",DATUM["Reseau Geodesique de Mayotte 2004",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4470]],CONVERSION["UTM zone 38S",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",45,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",10000000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["Mayotte - onshore and offshore."],BBOX[-14.49,43.68,-11.33,46.7]],ID["EPSG",4471]]','Mayotte'),
-  /* RGSPM06U21 - Saint-Pierre-et-Miquelon' */
-  ('Universal transverse Mercator fuseau 21 nord (RGSPM06U21)',4467,'EPSG',4467, 'PROJCRS["RGSPM06 / UTM zone 21N",BASEGEOGCRS["RGSPM06",DATUM["Reseau Geodesique de Saint Pierre et Miquelon 2006",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4463]],CONVERSION["UTM zone 21N",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",-57,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",0,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["St Pierre and Miquelon - onshore and offshore."],BBOX[43.41,-57.1,47.37,-55.9]],ID["EPSG",4467]]','Saint-Pierre-et-Miquelon')
+  /* valeurs pour le système de référence de coordonnées du territoire*/
+  ('Universal transverse Mercator fuseau 22 nord (RGFG95UTM22)',2972,'EPSG',2972, 'PROJCRS["RGFG95 / UTM zone 22N",BASEGEOGCRS["RGFG95",DATUM["Reseau Geodesique Francais Guyane 1995",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4624]],CONVERSION["UTM zone 22N",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",-51,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",0,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["French Guiana - east of 54°W, onshore and offshore."],BBOX[2.17,-54,8.88,-49.45]],ID["EPSG",2972]]','Guyane')
  ;
 
- 
+
 /** 
  * 
  * Création de la table `[PrefixePPR]_procedure`
  */
- 
 
 CREATE TABLE prefixeppr_procedure ( 
   
@@ -77,8 +162,8 @@ INSERT INTO gpkg_contents VALUES
  * Création de la table `[PrefixePPR]_perimetre_s`
  */
 CREATE TABLE prefixeppr_perimetre_s ( 
-  idperimetre INTEGER PRIMARY KEY AUTOINCREMENT, 
-  /* idperimetre TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  idperimetre TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   etatprocedure TEXT(10) NOT NULL, 
   dateetat DATE NOT NULL,
@@ -86,11 +171,11 @@ CREATE TABLE prefixeppr_perimetre_s (
   CONSTRAINT fk_perimetre_s_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure),
   CONSTRAINT fk_perimetre_s_etatprocedure FOREIGN KEY (etatprocedure) REFERENCES typeetatprocedure(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES 
   ('prefixeppr_perimetre_s','features','prefixeppr_perimetre_s','Table Perimetre Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
-/* Ajout à la table gpkg_geometry_columns - exemple en EPSG:2154 */
+/* Ajout à la table gpkg_geometry_columns  */
 INSERT INTO gpkg_geometry_columns VALUES 
   ('prefixeppr_perimetre_s','geom','MULTIPOLYGON',2972,0,0)
  ;
@@ -102,8 +187,8 @@ INSERT INTO gpkg_geometry_columns VALUES
  */
 
 CREATE TABLE prefixeppr_perimetreetude_s ( 
-  idperimetre INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idperimetre TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idperimetre TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   etatprocedure TEXT(10) NOT NULL, 
   dateetat DATE NOT NULL,
@@ -111,11 +196,11 @@ CREATE TABLE prefixeppr_perimetreetude_s (
   CONSTRAINT fk_perimetreetude_s_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure),
   CONSTRAINT fk_perimetreetude_s_etatprocedure FOREIGN KEY (etatprocedure) REFERENCES typeetatprocedure(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES 
   ('prefixeppr_perimetreetude_s','features','prefixeppr_perimetreetude_s','Table PerimetreEtude Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
-/* Ajout à la table gpkg_geometry_columns - exemple en EPSG:2154 */
+/* Ajout à la table gpkg_geometry_columns  */
 INSERT INTO gpkg_geometry_columns VALUES 
   ('prefixeppr_perimetreetude_s','geom','MULTIPOLYGON',2972,0,0)
  ;
@@ -148,8 +233,8 @@ INSERT INTO gpkg_contents VALUES
 
 
 CREATE TABLE prefixeppr_zonealeareference_codealea_s ( 
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonealea TEXT(15), */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2) NOT NULL,
@@ -160,7 +245,7 @@ CREATE TABLE prefixeppr_zonealeareference_codealea_s (
   CONSTRAINT fk_zonealeareference_codealea_typealea FOREIGN KEY (typealea) REFERENCES typealea(code),
   CONSTRAINT fk_zonealeareference_codealea_niveaualea FOREIGN KEY (niveaualea) REFERENCES typeniveaualea(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonealeareference_codealea_s','features','prefixeppr_zonealeareference_codealea_s','Table Zone Alea de Reference Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -174,9 +259,8 @@ INSERT INTO gpkg_geometry_columns VALUES
  * Création de la table `[PrefixePPR]_zonealeaecheance100ans_[CodeAlea]_s`
  */
 CREATE TABLE prefixeppr_zonealeaecheance100ans_117_s ( 
-  
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /*   idzonealea TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2) NOT NULL,
@@ -187,7 +271,7 @@ CREATE TABLE prefixeppr_zonealeaecheance100ans_117_s (
   CONSTRAINT fk_zonealeaecheance100ans_codealea_typealea FOREIGN KEY (typealea) REFERENCES typealea(code),
   CONSTRAINT fk_zonealeaecheance100ans_codealea_niveaualea FOREIGN KEY (niveaualea) REFERENCES typeniveaualea(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonealeaecheance100ans_117_s','features','prefixeppr_zonealeaecheance100ans_117_s','Table Zone Alea Echéance 100 ans Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -202,8 +286,8 @@ INSERT INTO gpkg_geometry_columns VALUES
  */
 CREATE TABLE prefixeppr_zonealeaexceptionnel_14_s ( 
   
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonealea TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2),
@@ -214,7 +298,7 @@ CREATE TABLE prefixeppr_zonealeaexceptionnel_14_s (
   CONSTRAINT fk_zonealeaexceptionnel_codealea_typealea FOREIGN KEY (typealea) REFERENCES typealea(code),
   CONSTRAINT fk_zonealeaexceptionnel_codealea_niveaualea FOREIGN KEY (niveaualea) REFERENCES typeniveaualea(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonealeaexceptionnel_14_s','features','prefixeppr_zonealeaexceptionnel_14_s','Table Zone Alea Exceptionnel Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -228,8 +312,8 @@ INSERT INTO gpkg_geometry_columns VALUES
  * Création de la table `[PrefixePPR]_zonealeanaturelsynthese_s`
  */
 CREATE TABLE prefixeppr_zonealeanaturelsynthese_s ( 
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /*   idzonealea TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2),
@@ -240,7 +324,7 @@ CREATE TABLE prefixeppr_zonealeanaturelsynthese_s (
   CONSTRAINT fk_zonealeanaturelsynthese_typealea FOREIGN KEY (typealea) REFERENCES typealea(code),
   CONSTRAINT fk_zonealeanaturelsynthese_niveaualea FOREIGN KEY (niveaualea) REFERENCES typeniveaualea(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonealeanaturelsynthese_s','features','prefixeppr_zonealeanaturelsynthese_s','Table Zone Alea Naturel Synthese Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -255,7 +339,7 @@ INSERT INTO gpkg_geometry_columns VALUES
 CREATE TABLE prefixeppr_zonemultialeanaturel (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   typealea TEXT(3) NOT NULL,
-  idzonealea INTEGER NOT NULL, /* TEXT(15) NOT NULL, */
+  idzonealea TEXT(15) NOT NULL,
   niveaualea TEXT(2),
   occurrence INTEGER,
   CONSTRAINT uk_zonemultialeanaturel_typealea_idzonealea UNIQUE (typealea,idzonealea),
@@ -274,8 +358,8 @@ INSERT INTO gpkg_contents VALUES
   * Création de la table `[PrefixePPR]_zonealeatechnorapide_[CodeAlea]_s`
   */
 CREATE TABLE prefixeppr_zonealeatechnorapide_codealea_s ( 
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonealea TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2) NOT NULL,
@@ -289,7 +373,7 @@ CREATE TABLE prefixeppr_zonealeatechnorapide_codealea_s (
   CONSTRAINT fk_zonealeatechnorapide_codealea_occurrence FOREIGN KEY (occurrence) REFERENCES typeclasseprobatechno(code),
   CONSTRAINT fk_zonealeatechnorapide_codealea_intensite FOREIGN KEY (intensite) REFERENCES typeintensitetechno(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonealeatechnorapide_codealea_s','features','prefixeppr_zonealeatechnorapide_codealea_s','Table Zone Alea Technologique Rapide Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -304,8 +388,8 @@ INSERT INTO gpkg_geometry_columns VALUES
   * Création de la table `[PrefixePPR]_zonealeatechnolent_[CodeAlea]_s`
   */
 CREATE TABLE prefixeppr_zonealeatechnolent_codealea_s ( 
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonealea TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2),
@@ -319,13 +403,13 @@ CREATE TABLE prefixeppr_zonealeatechnolent_codealea_s (
   CONSTRAINT fk_zonealeatechnolent_codealea_occurrence FOREIGN KEY (occurrence) REFERENCES typeclasseprobatechno(code),
   CONSTRAINT fk_zonealeatechnolent_codealea_intensite FOREIGN KEY (intensite) REFERENCES typeintensitetechno(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
-  ('prefixeppr_zonealeatechnolent_codealea_s','features','prefixeppr_zonealeatechnolent_codealea_s','Table Zone Alea technologique Lent Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,/*srs_id*/2154)
+  ('prefixeppr_zonealeatechnolent_codealea_s','features','prefixeppr_zonealeatechnolent_codealea_s','Table Zone Alea technologique Lent Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
 /* Ajout à la table gpkg_geometry_columns */
 INSERT INTO gpkg_geometry_columns VALUES
-  ('prefixeppr_zonealeatechnolent_codealea_s','geom','POLYGON',/*srs_id*/2154,0,0)
+  ('prefixeppr_zonealeatechnolent_codealea_s','geom','POLYGON',2972,0,0)
  ;
 
 
@@ -333,8 +417,8 @@ INSERT INTO gpkg_geometry_columns VALUES
   * Création de la table `[PrefixePPR]_zonealeatechnoprojection_[CodeAlea]_s`
   */
 CREATE TABLE prefixeppr_zonealeatechnoprojection_214_s ( 
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonealea TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2),
@@ -348,7 +432,7 @@ CREATE TABLE prefixeppr_zonealeatechnoprojection_214_s (
   CONSTRAINT fk_zonealeatechnoprojection_codealea_occurrence FOREIGN KEY (occurrence) REFERENCES typeclasseprobatechno(code),
   CONSTRAINT fk_zonealeatechnoprojection_codealea_intensite FOREIGN KEY (intensite) REFERENCES typeintensitetechno(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonealeatechnoprojection_214_s','features','prefixeppr_zonealeatechnoprojection_214_s','Table Zone Alea Technologique Projection Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -362,8 +446,8 @@ INSERT INTO gpkg_geometry_columns VALUES
  * Création de la table `[PrefixePPR]_zonealeatechnosynthese_s`
  */
 CREATE TABLE prefixeppr_zonealeatechnosynthese_s ( 
-  idzonealea INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonealea TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonealea TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2),
@@ -377,7 +461,7 @@ CREATE TABLE prefixeppr_zonealeatechnosynthese_s (
   CONSTRAINT fk_zonealeatechnosynthese_occurrence FOREIGN KEY (occurrence) REFERENCES typeclasseprobatechno(code),
   CONSTRAINT fk_zonealeatechnosynthese_intensite FOREIGN KEY (intensite) REFERENCES typeintensitetechno(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonealeatechnosynthese_s','features','prefixeppr_zonealeatechnosynthese_s','Table Zone Alea Technologique Synthese Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -392,8 +476,8 @@ INSERT INTO gpkg_geometry_columns VALUES
 CREATE TABLE prefixeppr_zonemultialeatechno (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   typealea TEXT(3) NOT NULL,
-  idzonealea INTEGER NOT NULL, /* TEXT(15) NOT NULL, */
-  niveaualea TEXT(2),
+  idzonealea TEXT(15) NOT NULL,
+  niveaualea TEXT(2), 
   occurrence TEXT(1), 
   intensite TEXT(2),
   CONSTRAINT uk_zonemultialeatechno_typealea_idzonealea UNIQUE (typealea,idzonealea),
@@ -416,16 +500,16 @@ INSERT INTO gpkg_contents VALUES
  * Création de la table `[PrefixePPR]_zoneprotegee_[CodeAlea]_s`
  */
 CREATE TABLE prefixeppr_zoneprotegee_codealea_s ( 
-  idzoneprotegee INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzoneprotegee TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzoneprotegee TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveauprotection TEXT,
   occurrence TEXT, 
   description TEXT, 
-  idouvrageprotecteur_s INTEGER, /* TEXT(50), */
-  idouvrageprotecteur_l INTEGER, /* TEXT(50),*/
-  idouvrageprotecteur_p INTEGER, /* TEXT(50), */
+  idouvrageprotecteur_s TEXT(50),
+  idouvrageprotecteur_l TEXT(50),
+  idouvrageprotecteur_p TEXT(50),
   geom POLYGON NOT NULL,
   CONSTRAINT fk_zoneprotegee_codealea_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure),
   CONSTRAINT fk_zoneprotegee_codealea_idouvrageprotecteur_s FOREIGN KEY (idouvrageprotecteur_s) REFERENCES prefixeppr_ouvrageprotecteur_codealea_s(idouvrageprotecteur),
@@ -433,7 +517,7 @@ CREATE TABLE prefixeppr_zoneprotegee_codealea_s (
   CONSTRAINT fk_zoneprotegee_codealea_idouvrageprotecteur_p FOREIGN KEY (idouvrageprotecteur_p) REFERENCES prefixeppr_ouvrageprotecteur_codealea_p(idouvrageprotecteur),
   CONSTRAINT fk_zoneprotegee_codealea_typealea FOREIGN KEY (typealea) REFERENCES typealea(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zoneprotegee_codealea_s','features','prefixeppr_zoneprotegee_codealea_s','Table Zone Protégée Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -446,16 +530,16 @@ INSERT INTO gpkg_geometry_columns VALUES
  * Création de la table `[PrefixePPR]_zonedangerspecifique_[CodeAlea]_s`
  */
 CREATE TABLE prefixeppr_zonedangerspecifique_codealea_s ( 
-  idzonedanger INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonedanger TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonedanger TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   typealea TEXT(3) NOT NULL,
   niveaualea TEXT(2) NOT NULL,
   typesuralea TEXT(2) NOT NULL,
   description TEXT, 
-  idouvrageprotecteur_s INTEGER, /* TEXT(50), */
-  idouvrageprotecteur_l INTEGER, /* TEXT(50),*/
-  idouvrageprotecteur_p INTEGER, /* TEXT(50), */
+  idouvrageprotecteur_s TEXT(50),
+  idouvrageprotecteur_l TEXT(50),
+  idouvrageprotecteur_p TEXT(50),
   geom POLYGON NOT NULL,
   CONSTRAINT fk_zonedangerspecifique_codealea_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure),
   CONSTRAINT fk_zonedangerspecifique_codealea_typealea FOREIGN KEY (typealea) REFERENCES typealea(code),
@@ -465,7 +549,7 @@ CREATE TABLE prefixeppr_zonedangerspecifique_codealea_s (
   CONSTRAINT fk_zonedangerspecifique_codealea_idouvrageprotecteur_p FOREIGN KEY (idouvrageprotecteur_p) REFERENCES prefixeppr_ouvrageprotecteur_codealea_p(idouvrageprotecteur),
   CONSTRAINT fk_zonedangerspecifique_codealea_typesuralea FOREIGN KEY (typesuralea) REFERENCES typesuralea(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonedangerspecifique_codealea_s','features','prefixeppr_zonedangerspecifique_codealea_s','Table Zone de danger Spécifique Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972)
  ;
@@ -481,8 +565,8 @@ INSERT INTO gpkg_geometry_columns VALUES
 
 /* Table Multipolygon */
 CREATE TABLE prefixeppr_ouvrageprotecteur_codealea_s ( 
-  idouvrageprotecteur INTEGER PRIMARY KEY AUTOINCREMENT, 
-  /* idouvrageprotecteur TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  idouvrageprotecteur TEXT(15) NOT NULL UNIQUE,
   idrefexterne TEXT(50), 
   refexterne TEXT(2) NOT NULL,
   refexterneautre TEXT,
@@ -495,8 +579,8 @@ CREATE TABLE prefixeppr_ouvrageprotecteur_codealea_s (
 );
 /* Table Linestring */
 CREATE TABLE prefixeppr_ouvrageprotecteur_codealea_l ( 
-  idouvrageprotecteur INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idouvrageprotecteur TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idouvrageprotecteur TEXT(15) NOT NULL UNIQUE,
   idrefexterne TEXT(50), 
   refexterne TEXT(2) NOT NULL,
   refexterneautre TEXT,
@@ -509,8 +593,8 @@ CREATE TABLE prefixeppr_ouvrageprotecteur_codealea_l (
 );
 /* Table Point */
 CREATE TABLE prefixeppr_ouvrageprotecteur_codealea_p ( 
-  idouvrageprotecteur INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idouvrageprotecteur TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idouvrageprotecteur TEXT(15) NOT NULL UNIQUE,
   idrefexterne TEXT(50), 
   refexterne TEXT(2) NOT NULL,
   refexterneautre TEXT,
@@ -521,7 +605,7 @@ CREATE TABLE prefixeppr_ouvrageprotecteur_codealea_p (
   CONSTRAINT fk_ouvrageprotecteur_codealea_p_refexterne FOREIGN KEY (refexterne) REFERENCES typerefexterneouvrage(code),
   CONSTRAINT fk_ouvrageprotecteur_codealea_p_typeouvrage FOREIGN KEY (typeouvrageprotecteur) REFERENCES typeouvrageprotecteur(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_ouvrageprotecteur_codealea_s','features','prefixeppr_ouvrageprotecteur_codealea_s','Table Ouvrage de protection Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
   ('prefixeppr_ouvrageprotecteur_codealea_l','features','prefixeppr_ouvrageprotecteur_codealea_l','Table Ouvrage de protection Linéaire PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
@@ -541,8 +625,8 @@ INSERT INTO gpkg_geometry_columns VALUES
 
 /* Table Multipolygon */
 CREATE TABLE prefixeppr_originerisque_s ( 
-  idoriginerisque INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idoriginerisque TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idoriginerisque TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL,
   idrefexterne TEXT(50), 
   refexterne TEXT,
@@ -552,8 +636,8 @@ CREATE TABLE prefixeppr_originerisque_s (
 );
 /* Table Linestring */
 CREATE TABLE prefixeppr_originerisque_l ( 
-  idoriginerisque INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idoriginerisque TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idoriginerisque TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL,
   idrefexterne TEXT(50), 
   refexterne TEXT,
@@ -563,7 +647,8 @@ CREATE TABLE prefixeppr_originerisque_l (
 );
 /* Table Point */
 CREATE TABLE prefixeppr_originerisque_p ( 
-  idoriginerisque INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idoriginerisque TEXT(15) NOT NULL UNIQUE,
   /* idoriginerisque TEXT(15) NOT NULL PRIMARY KEY, */
   codeprocedure TEXT(22) NOT NULL,
   idrefexterne TEXT(50), 
@@ -572,7 +657,7 @@ CREATE TABLE prefixeppr_originerisque_p (
   geom MULTIPOINT NOT NULL,
   CONSTRAINT fk_originerisque_p_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_originerisque_s','features','prefixeppr_originerisque_s','Table Origine du risque Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
   ('prefixeppr_originerisque_l','features','prefixeppr_originerisque_l','Table Origine du risque Linéaire PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
@@ -592,8 +677,8 @@ INSERT INTO gpkg_geometry_columns VALUES
 
 /* Table Multipolygon */
 CREATE TABLE prefixeppr_enjeu_s ( 
-  idenjeu INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* ididenjeu TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idenjeu TEXT(15) NOT NULL UNIQUE,
   idrefexterne TEXT(50), 
   refexterne TEXT,
   codeprocedure TEXT(22) NOT NULL,
@@ -606,8 +691,8 @@ CREATE TABLE prefixeppr_enjeu_s (
 );
 /* Table Linestring */
 CREATE TABLE prefixeppr_enjeu_l ( 
-  idenjeu INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idenjeu TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idenjeu TEXT(15) NOT NULL UNIQUE,
   idrefexterne TEXT(50), 
   refexterne TEXT,
   codeprocedure TEXT(22) NOT NULL,
@@ -620,8 +705,8 @@ CREATE TABLE prefixeppr_enjeu_l (
 );
 /* Table Point */
 CREATE TABLE prefixeppr_enjeu_p ( 
-  idenjeu INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idenjeu TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idenjeu TEXT(15) NOT NULL UNIQUE,
   idrefexterne TEXT(50), 
   refexterne TEXT,
   codeprocedure TEXT(22) NOT NULL,
@@ -632,7 +717,7 @@ CREATE TABLE prefixeppr_enjeu_p (
   geom MULTIPOINT NOT NULL,
   CONSTRAINT fk_enjeu_p_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_enjeu_s','features','prefixeppr_enjeu_s','Table Enjeux Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
   ('prefixeppr_enjeu_l','features','prefixeppr_enjeu_l','Table Enjeux Linéaire PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
@@ -651,16 +736,15 @@ INSERT INTO gpkg_geometry_columns VALUES
  */
 CREATE TABLE prefixeppr_typevulnerabilite ( 
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  idenjeu_s INTEGER, /* TEXT(15) NOT NULL, */ 
-  idenjeu_l INTEGER, /* TEXT(15) NOT NULL, */
-  idenjeu_p INTEGER, /* TEXT(15) NOT NULL, */
+  idenjeu_s TEXT(15),
+  idenjeu_l TEXT(15),
+  idenjeu_p TEXT(15),
   nom TEXT NOT NULL, 
   description TEXT, 
   valeur TEXT NOT NULL,
   CONSTRAINT fk_typevulnerabilite_idenjeu_s FOREIGN KEY (idenjeu_s) REFERENCES prefixeppr_enjeu_s(idenjeu),
   CONSTRAINT fk_typevulnerabilite_idenjeu_l FOREIGN KEY (idenjeu_l) REFERENCES prefixeppr_enjeu_l(idenjeu),
   CONSTRAINT fk_typevulnerabilite_idenjeu_p FOREIGN KEY (idenjeu_p) REFERENCES prefixeppr_enjeu_p(idenjeu)
-  /*CONSTRAINT pk_typevulnerabilite PRIMARY KEY (idenjeu_s,idenjeu_l,idenjeu_p,nom,valeur)*/
 );
 /* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES 
@@ -673,8 +757,8 @@ INSERT INTO gpkg_contents VALUES
  */
 /* Table Multipolygon */
 CREATE TABLE prefixeppr_zonereglementaireurba_s ( 
-  idzonereglementaire INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonereglementaire TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonereglementaire TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   codezonereglement TEXT NOT NULL, 
   libellezonereglement TEXT NOT NULL, 
@@ -686,8 +770,8 @@ CREATE TABLE prefixeppr_zonereglementaireurba_s (
 );
 /* Table Linestring */
 CREATE TABLE prefixeppr_zonereglementaireurba_l ( 
-  idzonereglementaire INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonereglementaire TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonereglementaire TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   codezonereglement TEXT NOT NULL, 
   libellezonereglement TEXT NOT NULL, 
@@ -699,8 +783,8 @@ CREATE TABLE prefixeppr_zonereglementaireurba_l (
 );
 /* Table Point */
 CREATE TABLE prefixeppr_zonereglementaireurba_p ( 
-  idzonereglementaire INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonereglementaire TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonereglementaire TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   codezonereglement TEXT NOT NULL, 
   libellezonereglement TEXT NOT NULL, 
@@ -710,7 +794,7 @@ CREATE TABLE prefixeppr_zonereglementaireurba_p (
   CONSTRAINT fk_zonereglementaireurba_p_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure),
   CONSTRAINT fk_zonereglementaireurba_p_typereglement FOREIGN KEY (typereglement) REFERENCES typereglementurba(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonereglementaireurba_s','features','prefixeppr_zonereglementaireurba_s','Table Zone Réglementaire Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
   ('prefixeppr_zonereglementaireurba_l','features','prefixeppr_zonereglementaireurba_l','Table Zone Réglementaire Linéaire PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
@@ -729,8 +813,8 @@ INSERT INTO gpkg_geometry_columns VALUES
  */
 /* Table Multipolygon */
 CREATE TABLE prefixeppr_zonereglementairefoncier_s ( 
-  idzonereglementaire INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonereglementaire TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonereglementaire TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   codezonereglement TEXT NOT NULL, 
   libellezonereglement TEXT NOT NULL, 
@@ -741,8 +825,8 @@ CREATE TABLE prefixeppr_zonereglementairefoncier_s (
 );
 /* Table Linestring */
 CREATE TABLE prefixeppr_zonereglementairefoncier_l ( 
-  idzonereglementaire INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonereglementaire TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonereglementaire TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   codezonereglement TEXT NOT NULL, 
   libellezonereglement TEXT NOT NULL, 
@@ -753,8 +837,8 @@ CREATE TABLE prefixeppr_zonereglementairefoncier_l (
 );
 /* Table Point */
 CREATE TABLE prefixeppr_zonereglementairefoncier_p ( 
-  idzonereglementaire INTEGER PRIMARY KEY AUTOINCREMENT,
-  /* idzonereglementaire TEXT(15) NOT NULL PRIMARY KEY, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idzonereglementaire TEXT(15) NOT NULL UNIQUE,
   codeprocedure TEXT(22) NOT NULL, 
   codezonereglement TEXT NOT NULL, 
   libellezonereglement TEXT NOT NULL, 
@@ -763,7 +847,7 @@ CREATE TABLE prefixeppr_zonereglementairefoncier_p (
   CONSTRAINT fk_zonereglementairefoncier_p_codeprocedure FOREIGN KEY (codeprocedure) REFERENCES prefixeppr_procedure(codeprocedure),
   CONSTRAINT fk_zonereglementairefoncier_p_typereglement FOREIGN KEY (typereglement) REFERENCES typereglementfoncier(code)
 );
-/* Ajout à la table gpkg_contents - exemple en EPSG:2154*/
+/* Ajout à la table gpkg_contents */
 INSERT INTO gpkg_contents VALUES
   ('prefixeppr_zonereglementairefoncier_s','features','prefixeppr_zonereglementairefoncier_s','Table Zone Réglementaire Foncier Surfacique PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
   ('prefixeppr_zonereglementairefoncier_l','features','prefixeppr_zonereglementairefoncier_l','Table Zone Réglementaire Foncier Linéaire PPR : typeppr codegaspar',(strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),NULL,NULL,NULL,NULL,2972),
@@ -780,14 +864,15 @@ INSERT INTO gpkg_geometry_columns VALUES
   * Création de la table `[PrefixePPR]_zoneregmultialea`
   */
 CREATE TABLE prefixeppr_zoneregmultialea (
-  idzoneregmultialea INTEGER PRIMARY KEY AUTOINCREMENT, /* idzoneregmultialea TEXT(15) NOT NULL, */
+  id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  idzoneregmultialea TEXT(15) NOT NULL UNIQUE,
   typealea TEXT(3) NOT NULL,
-  idzonereglementaire_u_s INTEGER, /* TEXT(15) NOT NULL, */
-  idzonereglementaire_u_l INTEGER, /* TEXT(15) NOT NULL, */
-  idzonereglementaire_u_p INTEGER, /* TEXT(15) NOT NULL, */
-  idzonereglementaire_f_s INTEGER, /* TEXT(15) NOT NULL, */
-  idzonereglementaire_f_l INTEGER, /* TEXT(15) NOT NULL, */
-  idzonereglementaire_f_p INTEGER, /* TEXT(15) NOT NULL, */
+  idzonereglementaire_u_s TEXT(15), 
+  idzonereglementaire_u_l TEXT(15),
+  idzonereglementaire_u_p TEXT(15),
+  idzonereglementaire_f_s TEXT(15),
+  idzonereglementaire_f_l TEXT(15),
+  idzonereglementaire_f_p TEXT(15),
   CONSTRAINT fk_zoneregmultialea_typealea FOREIGN KEY (typealea) REFERENCES typealea(code),
   CONSTRAINT fk_zoneregmultialea_zonereg_us FOREIGN KEY (idzonereglementaire_u_s) REFERENCES prefixeppr_zonereglementaireurba_s(idzonereglementaire),
   CONSTRAINT fk_zoneregmultialea_zonereg_ul FOREIGN KEY (idzonereglementaire_u_l) REFERENCES prefixeppr_zonereglementaireurba_l(idzonereglementaire),
@@ -1322,15 +1407,6 @@ INSERT INTO gpkg_contents VALUES
 /**
  * Métadonnées 
  */
-/* Ajout des tables gpkg_metadata et gpkg_metadata_reference dans la table gpkg_extensions */
-INSERT INTO gpkg_extensions VALUES 
-  /* (table_name,column_name,extension_name,definition,scope) */
-  ('gpkg_metadata',null,'gpkg_metadata','http://www.geopackage.org/spec140/#extension_metadata','read-write'),
-  ('gpkg_metadata_reference',null,'gpkg_metadata','http://www.geopackage.org/spec140/#extension_metadata','read-write')
- ;
-DELETE from gpkg_metadata ;
-DELETE from gpkg_metadata_reference ;
-
 
 /**
  * Exemple d'insertion de métadonnées de PPR
