@@ -1,6 +1,6 @@
 # FAQ Standard PPR
 
-Cette page liste quelques questions fréquentes relatives au standard et l'utilisation des ressources associées.
+Cette page rassemble quelques indications pratiques relatives au standard et l'utilisation des ressources associées.
 
 ## Utilisation des gabarits GeoPackage
 
@@ -26,7 +26,7 @@ A noter qu'il peut être possible de faire autrement, mais cela n'a pas été te
 
 C'est la méthode à privilégier si vous êtes à l'aise en SQL et avez la possibilité de faire tourner le [script de génération des gabarits](./gabarits/genGabarits.sh) qui est sur le github.
 
-Pour cela, la méthode générale est la suivante : 
+Pour cela, la méthode générale est la suivante :
 
 1. clonez le dépot github sur votre machine
 2. dans la copie locale du dépot rendez vous dans le répertoire `./ressources/gabarits`
@@ -49,15 +49,18 @@ Ce qui suit a été testé avec QGiS v3.44, il conviendra le cas échéant d'ada
 
 La difficulté avec QGiS est que la manipulation des couches (renommage, copie, suppression) dans le gestionnaire de couches ne modifie pas le fichier GeoPackage sous-jacent (et inversement). Il faut jongler avec l'outil "Base de données / Gestionnaire BD..." de QGiS pour cela. 
 
-Je n'ai pas trouvé de méthode plus simple avec QGiS. Si vous en avez n'hésitez pas à l'indiquer en PR ou Issue dans le github pour l'intégrer ici.
-
 ![alt text](./images/db-manager.png)
 
+Je n'ai pas trouvé de méthode plus simple avec QGiS. Si vous en avez n'hésitez pas à l'indiquer en PR ou Issue dans le github pour l'intégrer ici.
+
 4. Avec le Gestionnaire BD, dépliez la partie GeoPackage/nom-gabarit.gpkg et vous retrouvez l'ensemble des tables du fichier. C'est ici que vous allez pouvoir les manipuler de façon pérenne dans le fichier.
-   ![alt text](./images/db-manager-geopackage.png)
+
+![alt text](./images/db-manager-geopackage.png)
 
    1. **Supprimer une table** : clic droit sur le nom de la table sélectionnez "Effacer..."
+
    ![alt text](./images/db-manager-effacer.png)
+
    **NB** : cette opération ne supprime pas la couche du gestionnaire de couches QGiS. Vous allez devoir aussi la supprimer de ce dernier avec un clic droit > "Supprimer la couche"
 
    2. **Renommer une table** : clic droit sur le nom de la table sélectionnez "Renommer..." et saisissez le nom de la table
