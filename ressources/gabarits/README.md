@@ -1,5 +1,7 @@
 # Gabarits GeoPackage PPR
 
+## Organisation du dépôt
+
 Ce dossier contient les gabarits Geopackage du standard PPR pour chaque zone de projection couverte :
 
 - [2154](./2154) pour la France Métropolitaine et la Corse
@@ -10,8 +12,10 @@ Ce dossier contient les gabarits Geopackage du standard PPR pour chaque zone de 
 - [5490](./5490) pour les Antilles françaises
 
 
-Tous ces gabarits sont générés en lançant le bash genGabarits.sh qui nécessite l'installation préalable de de sqlite3 et la présence des fichiers suivants :
+Tous ces gabarits sont générés en lançant le bash genGabarits.sh qui nécessite l'installation préalable de de sqlite3 et la présence du fichier :
 
-- [prefixeppr-vide.gpkg](prefixeppr-vide.gpkg) fichier Geopackage minimal
 - [prefixeppr.sql](prefixeppr.sql) code SQL de création des tables du standard
 
+## Utilisation des gabarits
+
+Quelques conseils pour l'utilisation des gabarits pour la saisie d'un PPR sont fournis dans la page [FAQ](../FAQ.md).
