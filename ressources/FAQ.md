@@ -2,6 +2,13 @@
 
 Cette page rassemble quelques indications pratiques relatives au standard et l'utilisation des ressources associées.
 
+* [Utilisation des gabarits GeoPackage](#utilisation-des-gabarits-geopackage)
+  * [Personnalisation des gabarits pour constituer un PPR](#personnalisation-des-gabarits-pour-constituer-un-ppr)
+    * [Méthode 1 : Modification dans le code SQL](#méthode-1--modification-dans-le-code-sql)
+    * [Méthode 2 : En utilisant QGiS](#méthode-2--en-utilisant-qgis)
+  * [Utilisation des gabarits dans QGiS](#utilisation-des-gabarits-dans-qgis)
+* [Erreurs du validateur](#erreurs-du-validateur)
+
 ## Utilisation des gabarits GeoPackage
 
 ### Personnalisation des gabarits pour constituer un PPR
@@ -44,7 +51,7 @@ Si vous avez des difficultés à mettre en oeuvre la méthode précédente, vous
 Ce qui suit a été testé avec QGiS v3.44, il conviendra le cas échéant d'adapter les instructions en fonction de la version utilisée.
 
 1. Téléchargez le gabarit qui correspondant à votre territoire depuis le [dépôt Github](./gabarits/) ;
-2. Renommez le fichier en fonction du code CASPAR de votre PPR ;
+2. Renommez le fichier en fonction du code GASPAR de votre PPR ;
 3. Chargez le dans QGiS (drag n drop par exemple) ; sélectionnez toutes les couches proposées et ajoutez les au projet ;
 
 La difficulté avec QGiS est que la manipulation des couches (renommage, copie, suppression) dans le gestionnaire de couches ne modifie pas le fichier GeoPackage sous-jacent (et inversement). Il faut jongler avec l'outil "Base de données / Gestionnaire BD..." de QGiS pour cela. 
@@ -70,13 +77,13 @@ Je n'ai pas trouvé de méthode plus simple avec QGiS. Si vous en avez n'hésite
    1. Dans le gestionnaire de couche : clic droit et choisissez "Dupliquer la couche"
    ![alt text](./images/dupliquer-couche.png)
 
-   2. Pour pérenniser la couche qui a été créée dans le gestionnaire de couches il vous faut l'enregistre dans le fichier geopackage. Pour cela : clic droit, choisissez "Exporter... > Sauvegarder les Entités sous..."
+   2. Pour pérenniser la couche qui a été créée dans le gestionnaire de couches il vous faut l'enregistrer dans le fichier geopackage. Pour cela : clic droit, choisissez "Exporter... > Sauvegarder les Entités sous..."
    ![alt text](./images/sauvegarder-sous.png)
 
    3. Dans la boite de dialogue qui apparaît, sélectionnez le fichier GeoPackage du gabarit pour y enregistrer la nouvelle couche. A priori il n'y a rien d'autre à modifier dans les options proposées. Cliquez sur OK.
    ![alt text](./images/bdd-enregistrer.png)
 
-   Vous pouvez ensuite retourner dans le gestionnaire de bases de donnés de QGiS pour renommer la table dans le GeoPackage (cf. étapes précédentes)
+   Vous pouvez ensuite retourner dans le gestionnaire de bases de donnés de QGiS pour renommer la table dans le GeoPackage (cf. étapes précédentes).
 
 ### Utilisation des gabarits dans QGiS
 
