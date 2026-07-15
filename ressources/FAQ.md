@@ -7,7 +7,9 @@ Cette page rassemble quelques indications pratiques relatives au standard et l'u
     * [Méthode 1 : Modification dans le code SQL](#méthode-1--modification-dans-le-code-sql)
     * [Méthode 2 : En utilisant QGiS](#méthode-2--en-utilisant-qgis)
   * [Utilisation des gabarits dans QGiS](#utilisation-des-gabarits-dans-qgis)
+* [Conversion COVADIS PPR vers nouveau standard](#conversion-covadis-ppr-vers-nouveau-standard)
 * [Erreurs du validateur](#erreurs-du-validateur)
+
 
 ## Utilisation des gabarits GeoPackage
 
@@ -105,6 +107,17 @@ Cela peut apparaître contraignant mais cela permet de conserver le contrôle de
 NB : Par ailleurs les gabarits comprennent les tables d’énumérations, avec les liens
 de clefs étrangères des champs énumérés vers ces tables, ce qui facilite la saisie des valeurs énumérées depuis les tables de
 gabarits.
+
+## Conversion COVADIS PPR vers nouveau standard
+
+### Existe-t-il des outils pour convertir des anciens PPR vers le nouveau standard ?
+
+Il n'existe pas d'outil sur étagère permettant de faire la conversion de données PPR conformes au standard COVADIS vers le nouveau standard CNIG PPR.
+
+Cependant :
+
+* Des règles de correspondances entre les deux standards sont documentées dans [l'annexe A du nouveau standard](https://github.com/cnigfr/Geostandards-risques-ppr/blob/master/standard/Document.md#annexe-a---correspondances-avec-les-standards-covadis-ppr-n-et-t) ;
+* Des bouts de code (SQL) ou benchmark FME, élaborés lors de la conception du nouveau standard sont disponibles sur le [github du GT Risques](https://github.com/cnigfr/Geostandards-Risques/tree/main/ressources/traduction). Ils sont expérimentaux et nécessitent une adaptation pour être réutilisés.
 
 ## Erreurs du validateur
 
