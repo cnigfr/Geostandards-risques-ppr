@@ -10,7 +10,6 @@ Cette page rassemble quelques indications pratiques relatives au standard et l'u
 * [Conversion COVADIS PPR vers nouveau standard](#conversion-covadis-ppr-vers-nouveau-standard)
 * [Erreurs du validateur](#erreurs-du-validateur)
 
-
 ## Utilisation des gabarits GeoPackage
 
 ### Personnalisation des gabarits pour constituer un PPR
@@ -56,7 +55,7 @@ Ce qui suit a été testé avec QGiS v3.44, il conviendra le cas échéant d'ada
 2. Renommez le fichier en fonction du code GASPAR de votre PPR ;
 3. Chargez le dans QGiS (drag n drop par exemple) ; sélectionnez toutes les couches proposées et ajoutez les au projet ;
 
-La difficulté avec QGiS est que la manipulation des couches (renommage, copie, suppression) dans le gestionnaire de couches ne modifie pas le fichier GeoPackage sous-jacent (et inversement). Il faut jongler avec l'outil "Base de données / Gestionnaire BD..." de QGiS pour cela. 
+La difficulté avec QGiS est que la manipulation des couches (renommage, copie, suppression) dans le gestionnaire de couches ne modifie pas le fichier GeoPackage sous-jacent (et inversement). Par ailleurs, les contraintes et les relations existantes entre tables (clés étrangères) seront perdues lorsqu'on renomme les tables (cf. [Utilisation des gabarits dans QGiS](#utilisation-des-gabarits-dans-qgis)). La mise à jour des tables de métadonnées du fichier GeoPackage (gpkg_contents, etc...) ne sont pas forcément mises à jour si on ne fait pas attention et le fichier GeoPackage résultant risque d'être incohérent au final. L'outil "Base de données / Gestionnaire BD..." de QGiS permet de réaliser certaines opérations correctement de ce point de vue.
 
 ![alt text](./images/db-manager.png)
 
@@ -70,12 +69,20 @@ Je n'ai pas trouvé de méthode plus simple avec QGiS. Si vous en avez n'hésite
 
    ![alt text](./images/db-manager-effacer.png)
 
-   **NB** : cette opération ne supprime pas la couche du gestionnaire de couches QGiS. Vous allez devoir aussi la supprimer de ce dernier avec un clic droit > "Supprimer la couche"
+   Cette opération retire bien la table du fichier GeoPackage et la déréférence des tables de métadonnées de GeoPackage.
 
-   2. **Renommer une table** : clic droit sur le nom de la table sélectionnez "Renommer..." et saisissez le nom de la table
+   **NB** : cette opération ne supprime pas la couche du gestionnaire de couches QGiS. Vous allez devoir aussi la supprimer de ce dernier avec un clic droit > "Supprimer la couche".
+
+   2. **Renommer une table** : clic droit sur le nom de la table sélectionnez "Renommer..." et saisissez le nom de la table.
+
+   Cette opération renomme bien la table du fichier GeoPackage et référence bien le nouveau nom dans les tables de métadonnées de GeoPackage.
+
    **NB** : cette opération ne renomme pas la couche correspondante dans le gestionnaire de couche. Pour cela, il faut faire à nouveau clic droit > "Ajouter au canevas" pour la couche renommée apparaisse dans le gestionnaire de couche. Ensuite, dans ce dernier, vous devrez supprimer la couche portant encore l'ancien nom avec un clic droit > "Supprimer la couche".
 
+   **NB** : après cette opération, **les relations et contraintes existantes entre la table modifiée et les autres tables du gabarit sont perdues** : la saisie d'entités dans la nouvelle table ne bénéficiera plus de ces contraintes (par exemple choix de valeurs parmi celles déjà présentes dans les tables liées : par exemple table d'énumération).
+
 5. **Dupliquer et renommer une table**" : cette opération nécessite de revenir d'abord au gestionnaire de couches de QGiS.
+
    1. Dans le gestionnaire de couche : clic droit et choisissez "Dupliquer la couche"
    ![alt text](./images/dupliquer-couche.png)
 
@@ -87,11 +94,11 @@ Je n'ai pas trouvé de méthode plus simple avec QGiS. Si vous en avez n'hésite
 
    Vous pouvez ensuite retourner dans le gestionnaire de bases de donnés de QGiS pour renommer la table dans le GeoPackage (cf. étapes précédentes).
 
+   **NB** : Ici aussi, après cette opération, **les relations et contraintes existantes entre la couche dupliquée et les autres tables du gabarit sont perdues** : la saisie d'entités dans la nouvelle table ne bénéficiera plus de ces contraintes (par exemple choix de valeurs parmi celles déjà présentes dans les tables liées : par exemple table d'énumération).
+
 ### Utilisation des gabarits dans QGiS
 
-Une fois les gabarits renommés et préparés pour la saisie, il ne vous reste plus qu'à utiliser les outils pour remplir le PPR.
-
-Dans QGiS (mais certainement dans d'autres SIG), il convient de noter que les relations existantes entre tables implémentées dans le gabarit vont imposer un certain ordre pour la saisie :
+Ls gabarits fournis implémentent les liens entre les tables sous forme de clés étrangères. Dans QGiS (mais certainement dans d'autres SIG), ces relations existantes entre tables implémentées dans le gabarit vont imposer un certain ordre pour la saisie :
 
 Presque toutes les tables ont un lien via la clef étrangère `codeProcedure` avec la table `procedure`, il faut en premier saisir
 une entité dans la table procedure avec un codeProcedure que vous pourrez saisir sans difficulté.
@@ -104,9 +111,9 @@ Ensuite, la saisie des autres entités fonctionnera car la valeur de codeProcedu
 
 Cela peut apparaître contraignant mais cela permet de conserver le contrôle de cette contrainte lors de la saisie.
 
-NB : Par ailleurs les gabarits comprennent les tables d’énumérations, avec les liens
-de clefs étrangères des champs énumérés vers ces tables, ce qui facilite la saisie des valeurs énumérées depuis les tables de
-gabarits.
+Par ailleurs les gabarits comprennent les tables d’énumérations, avec les liens de clefs étrangères des champs énumérés vers ces tables, ce qui facilite la saisie des valeurs énumérées depuis les tables de gabarits.
+
+**NB** : Ces facilités de saisie inhérentes aux contraintes implémentées dans les gabarits sont perdues dès lors que l'on renomme les couches du gabarits dans QGiS (cf. [Personnalisation des gabarits > méthode 2 en utilisant QGiS](#méthode-2--en-utilisant-qgis)). Si on veut les conserver, il convient d'utiliser les couches du gabarit telles quelles pour saisir les entités, puis exporter les entités dans une couche du GeoPackage portant le nom final.
 
 ## Conversion COVADIS PPR vers nouveau standard
 
