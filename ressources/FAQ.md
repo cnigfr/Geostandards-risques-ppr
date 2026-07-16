@@ -113,7 +113,7 @@ Cela peut apparaître contraignant mais cela permet de conserver le contrôle de
 
 Par ailleurs les gabarits comprennent les tables d’énumérations, avec les liens de clefs étrangères des champs énumérés vers ces tables, ce qui facilite la saisie des valeurs énumérées depuis les tables de gabarits.
 
-**NB** : Ces facilités de saisie inhérentes aux contraintes implémentées dans les gabarits sont perdues dès lors que l'on renomme les couches du gabarits dans QGiS (cf. [Personnalisation des gabarits > méthode 2 en utilisant QGiS](#méthode-2--en-utilisant-qgis)). Si on veut les conserver, il convient d'utiliser les couches du gabarit telles quelles pour saisir les entités, puis exporter les entités dans une couche du GeoPackage portant le nom final.
+**NB** : Ces facilités de saisie inhérentes aux contraintes implémentées dans les gabarits sont perdues dès lors que l'on renomme les couches du gabarits dans QGiS (cf. [Personnalisation des gabarits > méthode 2 en utilisant QGiS](#méthode-2--en-utilisant-qgis)). Si on veut les conserver, il convient : soit de les renommer en amont directement dans le code SQL de génération du gabarit (cf. [Personnalisation des gabarits > méthode 1 : modification dans le code SQL](#méthode-1--modification-dans-le-code-sql)), soit d'utiliser les couches du gabarit telles quelles pour saisir les entités, puis exporter les entités dans une couche du GeoPackage portant le nom final.
 
 ## Conversion COVADIS PPR vers nouveau standard
 
